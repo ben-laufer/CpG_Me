@@ -3,6 +3,22 @@
 
 CpG_Me_PE is a series of shell scripts that automate a WGBS workflow that takes you from raw fastq files to extracted CpG methylation count values, where it preprocesses data to remove biases and provides ample QC/QA. 
 
+## Installation
+
+This workflow utilizes the following packages, which need to be installed and in your paths:
+1. [Trim Galore!](https://github.com/FelixKrueger/TrimGalore)
+2. [Bismark](https://github.com/FelixKrueger/Bismark)
+3. [Bowtie 2](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml)
+4. [FastQ Screen](https://www.bioinformatics.babraham.ac.uk/projects/fastq_screen/)
+5. [Samtools](http://www.htslib.org)
+6. [MultiQC](http://multiqc.info)
+
+I reccomend using [Bioconda](https://bioconda.github.io) to install and manage the package updates, which can be accomplished by:
+
+`conda install -c bioconda trim-galore bismark bowtie2 samtools fastq-screen multiqc`
+
+Bisulfite converted genomes will also have be created and placed in an external folder for the genome of interest as well as the genomes you would like to use to screen for contamination. This can be accomplished by using `bismark_genome_preparation` which is detailed in the [Bismark docs](https://github.com/FelixKrueger/Bismark/tree/master/Docs).
+
 ## Chastity Filtering
 
 This workflow assumes your data is Illumina quality/chastity filtered, which most service providers these days will do by default.
@@ -32,3 +48,6 @@ Let’s break this apart:
 There is also a final QC report to be run AFTER all samples have finished, which you also need to launch from the working directory
 
 `sbatch /share/lasallelab/programs/CpG_Me/CpG_Me_QC_PE.sh` 
+
+## Acknowledgements
+The author would like to thank [Matt Settles](https://github.com/msettles) from the [UC Davis Bioinformatics Core](https://github.com/ucdavis-bioinformatics) for his suggestion of using a case statement to optimize the resource use of the different parts of this workflow on a High-Performance Computing Cluster
