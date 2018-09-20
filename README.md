@@ -1,7 +1,7 @@
 # CpG_Me
 ### A whole-genome bisulfite sequencing (WGBS) pipeline for the analysis of DNA methylation
 
-CpG_Me_PE is a series of shell scripts that automate a WGBS workflow that takes you from raw fastq files to extracted CpG methylation count values, where it preprocesses data to remove biases and provides ample QC/QA. 
+CpG_Me is a series of shell scripts that automate a WGBS workflow that takes you from raw fastq files to extracted CpG methylation count values, where it preprocesses data to remove biases and provides ample QC/QA. 
 
 ## Installation
 
