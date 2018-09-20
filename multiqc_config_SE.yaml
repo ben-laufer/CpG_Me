@@ -1,0 +1,51 @@
+# Titles and introductory text
+title: "CpG_Me"
+subtitle: "QC for a custom WGBS workflow"
+intro_text: "Multiple QC reports summarise filtering, trimming, alignment, and methylation bias (m-bias) results."
+report_comment: "This is the LaSalle lab version of CpG_Me for single end sequencing."
+
+# Report Logo
+custom_logo: '/share/lasallelab/programs/CpG_Me/UCDavis.png'
+custom_logo_url: 'http://mmi-lab.ucdavis.edu/wordpress/'
+custom_logo_title: 'LaSalle Lab @ UC Davis'
+
+#Project level information
+report_header_info:
+    - Workflow Developer: 'Ben Laufer'
+    - E-mail: 'blaufer@ucdavis.edu'
+    - Application Type: 'WGBS'
+    - Project Type: 'Cord Blood'
+    - Sequencing Platform: 'HiSeq 4000'
+    - Sequencing Setup: 'SE 100 SI'
+    - Library Kit: 'TruSeq DNA Methylation (Illumina)'
+    - Genome: 'hg38'
+    
+table_columns_visible:
+    FastQC:
+        percent_duplicates: False
+        percent_gc: False
+        avg_sequence_length: False
+        percent_fails: False
+        total_sequences: False
+    Bismark:
+        dedup_reads: True
+        aligned_reads: True
+
+# Reorder    
+module_order:
+    - fastqc
+    - cutadapt
+
+remove_sections:
+    - fastqc_per_base_sequence_content
+    - fastqc_per_sequence_gc_content
+
+
+#extra_fn_clean_exts:
+#    - type: regex_keep
+#      pattern: '^(.+?)_'
+
+#
+# https://github.com/ewels/MultiQC/blob/master/docs/customisation.md
+# https://github.com/ewels/MultiQC/issues/542
+# https://github.com/ewels/MultiQC/pull/576
