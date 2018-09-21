@@ -2,8 +2,8 @@
 #
 #SBATCH --job-name=CpG_Me_PE
 #SBATCH --partition=production   
-#SBATCH --output=CpG_Me_PE_%A.out # File to which STDOUT will be written
-#SBATCH --error=CpG_Me_PE_%A.err # File to which STDERR will be written
+#SBATCH --output=slurmlogs/CpG_Me_PE_%A.out # File to which STDOUT will be written
+#SBATCH --error=slurmlogs/CpG_Me_PE_%A.err # File to which STDERR will be written
 #SBATCH --time=0-00:10:00
 
 ##########################################################################################
