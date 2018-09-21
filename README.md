@@ -5,7 +5,7 @@ CpG_Me is a series of shell scripts that automate a WGBS workflow that takes you
 
 ## Installation
 
-This workflow utilizes the following packages, which need to be installed and in your paths:
+This workflow utilizes the following packages, which need to be installed and in your path:
 1. [Trim Galore!](https://github.com/FelixKrueger/TrimGalore)
 2. [Bismark](https://github.com/FelixKrueger/Bismark)
 3. [Bowtie 2](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml)
@@ -17,7 +17,7 @@ I reccomend using [Bioconda](https://bioconda.github.io) to install and manage t
 
 `conda install -c bioconda trim-galore bismark bowtie2 samtools fastq-screen multiqc`
 
-Bisulfite converted genomes will also have be created and placed in an external folder for the genome of interest as well as the genomes you would like to use to screen for contamination. This can be accomplished by using `bismark_genome_preparation` which is detailed in the [Bismark docs](https://github.com/FelixKrueger/Bismark/tree/master/Docs).
+Bisulfite converted genomes will also have be created and placed in an external folder for the genome of interest as well as the genomes you would like to use to screen for contamination. This can be accomplished by using `bismark_genome_preparation`, which is detailed in the [Bismark docs](https://github.com/FelixKrueger/Bismark/tree/master/Docs), and example scripts are available in the Genome_preperation folder of this repository.
 
 ## Chastity Filtering
 
@@ -50,4 +50,4 @@ There is also a final QC report to be run AFTER all samples have finished, which
 `sbatch /share/lasallelab/programs/CpG_Me/CpG_Me_QC_PE.sh` 
 
 ## Acknowledgements
-The author would like to thank [Matt Settles](https://github.com/msettles) from the [UC Davis Bioinformatics Core](https://github.com/ucdavis-bioinformatics) for his suggestion of using a case statement to optimize the resource use of the different parts of this workflow on a High-Performance Computing Cluster
+The author would like to thank [Matt Settles](https://github.com/msettles) from the [UC Davis Bioinformatics Core](https://github.com/ucdavis-bioinformatics) for his suggestion of using a case statement to optimize the resource use of the different parts of this workflow on a high-performance computing cluster.
