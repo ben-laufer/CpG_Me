@@ -1,7 +1,7 @@
 # CpG_Me
 ### A whole-genome bisulfite sequencing (WGBS) pipeline for the analysis of DNA methylation
 
-CpG_Me is a series of shell scripts that automate a WGBS workflow that takes you from raw fastq files to extracted CpG methylation count values, where it preprocesses data to remove biases and provides ample QC/QA. Scripts are available for both paired end (PE) and single end (SE) sequencing approaches. 
+CpG_Me is a series of shell scripts that automate a WGBS workflow that takes you from raw fastq files to extracted CpG methylation count matrices, where it preprocesses data to remove biases and provides ample QC/QA. Scripts are available for both paired end (PE) and single end (SE) sequencing approaches. The extracted CpG methylation count matrices can be then be used for the identification of differentially methylated regions (DMRs) through the accompanying [DM.R](https://github.com/ben-laufer/DM.R) workflow.
 
 ## Installation
 
@@ -13,11 +13,13 @@ This workflow utilizes the following packages, which need to be installed and in
 5. [Samtools](http://www.htslib.org)
 6. [MultiQC](http://multiqc.info)
 
-I reccomend using [Bioconda](https://bioconda.github.io) to install and manage the package updates, which can be accomplished by:
+I recommend using [Bioconda](https://bioconda.github.io) to install and manage the package updates, which can be accomplished by:
 
 `conda install -c bioconda trim-galore bismark bowtie2 samtools fastq-screen multiqc`
 
 Bisulfite converted genomes will also have be created and placed in an external folder for the genome of interest as well as the genomes you would like to use to screen for contamination. This can be accomplished by using `bismark_genome_preparation`, which is detailed in the [Bismark docs](https://github.com/FelixKrueger/Bismark/tree/master/Docs), and example scripts are available in the Genome_preperation folder of this repository.
+
+Finally, if you are interested in using the output with [WGBS_tools](https://github.com/kwdunaway/WGBS_Tools/tree/perl_code) or [DMRfinder](https://github.com/cemordaunt/DMRfinder) the `Bismark_to_Permeth_DSS.py` script is available in the [bismark-file-converter repository](https://github.com/hyeyeon-hwang/bismark-file-converter). This script should be placed in the same directory as the rest of this repository. If you do not wish to use this file converter, then the final calls in both the switch and controller scripts should be deleted. 
 
 ## Chastity Filtering
 
@@ -53,17 +55,17 @@ There is also a final QC report to be run AFTER all samples have finished, which
 For single end sequencing (SE), follow the same approach as paired end (PE) but with calls to the SE scripts. 
 
 ## Correcting for methylation bias (m-bias)
-[Methylation bias (m-bias)](https://www.ncbi.nlm.nih.gov/pubmed/23034175) is an artificat from sequencing approaches where the 5' and 3' ends contain artificial methylation levels due to the library preperation method. It is important to always examine for this bias in the MultiQC reports. CpG m-bias can be used to guide trimming options, while CpH m-bias can be used to judge for incomplete bisulfite conversion. In our experience, we have come across the following parameters, although we reccomend to examine every dataset, particularly when trying a new library preperation method or sequencing platform. 
+[Methylation bias (m-bias)](https://www.ncbi.nlm.nih.gov/pubmed/23034175) is an artifact from sequencing approaches where the 5' and 3' ends contain artificial methylation levels due to the library preparation method. It is important to always examine for this bias in the MultiQC reports. CpG m-bias can be used to guide trimming options, while CpH m-bias can be used to judge for incomplete bisulfite conversion. In our experience, we have come across the following parameters, although we recommend to examine every dataset, particularly when trying a new library preparation method or sequencing platform. 
 
 ### Paired end (PE)
 
-| Library prep kit                      | clip_r1 | clip_r2 | three_prime_clip_r1  | three_prime_clip_r2 | 
+| Library preparation kit               | clip_r1 | clip_r2 | three_prime_clip_r1  | three_prime_clip_r2 | 
 | ------------------------------------- | ------- | ------- | -------------------- | ------------------- | 
 | TruSeq DNA Methylation Kit (EpiGnome) | 8       | 20      | 8                    | 8                   |
 
 ### Single end (SE)
 
-| Library prep kit                      | clip_r1 | three_prime_clip_r1  | 
+| Library preparation kit               | clip_r1 | three_prime_clip_r1  | 
 | ------------------------------------- | ------- | -------------------- | 
 | TruSeq DNA Methylation Kit (EpiGnome) | 8       |  8                   | 
 | MethylC-Seq (Original Method)         | 7       |  10                  |
