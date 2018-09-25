@@ -1,7 +1,7 @@
 # CpG_Me
 ### A whole-genome bisulfite sequencing (WGBS) pipeline for the analysis of DNA methylation
 
-CpG_Me is a series of shell scripts that automate a WGBS workflow that takes you from raw fastq files to extracted CpG methylation count values, where it preprocesses data to remove biases and provides ample QC/QA. 
+CpG_Me is a series of shell scripts that automate a WGBS workflow that takes you from raw fastq files to extracted CpG methylation count values, where it preprocesses data to remove biases and provides ample QC/QA. Scripts are available for both paired end (PE) and single end (SE) sequencing approaches. 
 
 ## Installation
 
@@ -31,7 +31,7 @@ If they aren’t you can accomplish this on command line via, where you change J
 
 `zcat JLBL001*fastq.gz | zgrep -A 3 '^@.* [^:]*:N:[^:]*:' | zgrep -v "^--$" | gzip > JLBL001_filtered.fq.gz`
 
-## How to use CpG_Me:
+## How to use CpG_Me for paired end sequencing:
 1.	Create a parent directory 
 2.	Within that parent directory, add a text file called “task_samples.txt”, where each new line contains the entire sample name exactly as it appears on the fastq read pair files, aside from the end part (“_1.fq.gz” or “_2.fq.gz”). Only name a sample once, NOT twice, and make sure it is .fq.gz and not fastq.gz. Also, if you’re using excel or a windows desktop, you will need to change the linebreaks from windows to unix, which can be done using text wrangler.
 3.	Within that parent directory create a folder called “raw_sequences” that contains all raw paired fastq files (.fq.gz)
@@ -49,5 +49,24 @@ There is also a final QC report to be run AFTER all samples have finished, which
 
 `sbatch /share/lasallelab/programs/CpG_Me/CpG_Me_QC_PE.sh` 
 
+## How to use CpG_Me for single end sequencing:
+For single end sequencing (SE), follow the same approach as paired end (PE) but with calls to the SE scripts. 
+
+## Correcting for methylation bias (m-bias)
+[Methylation bias (m-bias)](https://www.ncbi.nlm.nih.gov/pubmed/23034175) is an artificat from sequencing approaches where the 5' and 3' ends contain artificial methylation levels due to the library preperation method. It is important to always examine for this bias in the MultiQC reports. CpG m-bias can be used to guide trimming options, while CpH m-bias can be used to judge for incomplete bisulfite conversion. In our experience, we have come across the following parameters, although we reccomend to examine every dataset, particularly when trying a new library preperation method or sequencing platform. 
+
+### Paired end (PE)
+
+| Library prep kit                      | clip_r1 | clip_r2 | three_prime_clip_r1  | three_prime_clip_r2 | 
+| ------------------------------------- | ------- | ------- | -------------------- | ------------------- | 
+| TruSeq DNA Methylation Kit (EpiGnome) | 8       | 20      | 8                    | 8                   |
+
+### Single end (SE)
+
+| Library prep kit                      | clip_r1 | three_prime_clip_r1  | 
+| ------------------------------------- | ------- | -------------------- | 
+| TruSeq DNA Methylation Kit (EpiGnome) | 8       |  8                   | 
+| MethylC-Seq (Original Method)         | 7       |  10                  |
+
 ## Acknowledgements
-The author would like to thank [Matt Settles](https://github.com/msettles) from the [UC Davis Bioinformatics Core](https://github.com/ucdavis-bioinformatics) for his suggestion of using a case statement to optimize the resource use of the different parts of this workflow on a high-performance computing cluster.
+The author would like to thank [Matt Settles](https://github.com/msettles) from the [UC Davis Bioinformatics Core](https://github.com/ucdavis-bioinformatics) for examples of tidy code and his suggestion of using a case statement to optimize the resource use of the different parts of this workflow on a high-performance computing cluster.
