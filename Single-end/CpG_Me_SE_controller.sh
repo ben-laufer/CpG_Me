@@ -81,7 +81,7 @@ jid3=$(sbatch \
 --dependency=afterok:$jid2 \
 --ntasks=1 \
 --mem=30000 \
---time=0-08:00:00 \
+--time=1-12:00:00 \
 /share/lasallelab/programs/CpG_Me/CpG_Me_SE_switch.sh \
 deduplicate \
 ${genome} \
