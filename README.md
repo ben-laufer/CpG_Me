@@ -71,4 +71,4 @@ For single end sequencing (SE), follow the same approach as paired end (PE) but 
 | MethylC-Seq (Original Method)         | 7       |  10                  |
 
 ## Acknowledgements
-The author would like to thank [Matt Settles](https://github.com/msettles) from the [UC Davis Bioinformatics Core](https://github.com/ucdavis-bioinformatics) for examples of tidy code and his suggestion of using a case statement to optimize the resource use of the different parts of this workflow on a high-performance computing cluster.
+The author would like to thank [Matt Settles](https://github.com/msettles) from the [UC Davis Bioinformatics Core](https://github.com/ucdavis-bioinformatics) for [examples of tidy code](https://github.com/ucdavis-bioinformatics-training/A-Primer-on-Using-the-Bioinformatics-Core-Administrated-Servers-and-Cluster-s-/tree/master/examples) and his suggestion of using a case statement to optimize the resource use of the different parts of this workflow on a high-performance computing cluster.
