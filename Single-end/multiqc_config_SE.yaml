@@ -38,7 +38,6 @@ module_order:
 
 remove_sections:
     - fastqc_per_base_sequence_content
-    - fastqc_per_sequence_gc_content
 
 
 #extra_fn_clean_exts:
