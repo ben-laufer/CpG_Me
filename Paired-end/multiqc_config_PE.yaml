@@ -59,9 +59,7 @@ module_order:
 
 remove_sections:
     - fastqc_per_base_sequence_content
-    - fastqc_per_sequence_gc_content
     - fastqc_per_base_sequence_content-1
-    - fastqc_per_sequence_gc_content-1
 
 #
 # https://github.com/ewels/MultiQC/blob/master/docs/customisation.md
