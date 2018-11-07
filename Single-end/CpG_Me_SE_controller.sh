@@ -4,8 +4,8 @@
 #SBATCH --ntasks=1 # Number of cores/threads
 #SBATCH --mem-per-cpu=1000 # Ram in Mb
 #SBATCH --partition=production 
-#SBATCH --output=slurmlogs/CpG_Me_SE_%A_%a.out # File to which STDOUT will be written
-#SBATCH --error=slurmlogs/CpG_Me_SE_%A_%a.err # File to which STDERR will be written
+#SBATCH --output=CpG_Me_SE_%A_%a.out # File to which STDOUT will be written
+#SBATCH --error=CpG_Me_SE_%A_%a.err # File to which STDERR will be written
 #SBATCH --time=0-00:10:00
 
 ##########################################################################################
