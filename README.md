@@ -19,6 +19,26 @@ I recommend using [Bioconda](https://bioconda.github.io) to install and manage t
 
 Bisulfite converted genomes will also have be created and placed in an external folder for the genome of interest as well as the genomes you would like to use to screen for contamination. This can be accomplished by using `bismark_genome_preparation`, which is detailed in the [Bismark docs](https://github.com/FelixKrueger/Bismark/tree/master/Docs), and example scripts are available in the Genome_preperation folder of this repository. These scripts expect that each bisulfite converted genome is located in a `genomes` folder, which contains a folder for each genome within it (i.e. `hg38`). The paths will also need to be changed in the scripts, where for our environment they begin with `/share/lasallelab/` and the scripts themselves are located in the `programs` folder.
 
+The genome folder structure should appear as:
+
+```
+├── genomes
+│   ├── hg38
+│   │   ├── Bisulfite_Genome
+│   │   │   ├── CT_conversion
+│   │   │   ├── GA_conversion
+│   │   ├── Bowtie2
+│   │   ├── hg38.fa
+│   │   ├── hg38.fa.fai
+│   ├── mm10
+│   │   ├── Bisulfite_Genome
+│   │   │   ├── CT_conversion
+│   │   │   ├── GA_conversion
+│   │   ├── Bowtie2
+│   │   ├── mm10.fa
+│   │   ├── mm10.fa.fai
+```
+
 Finally, if you are interested in using the output with [WGBS_tools](https://github.com/kwdunaway/WGBS_Tools/tree/perl_code) or [DMRfinder](https://github.com/cemordaunt/DMRfinder) the `Bismark_to_Permeth_DSS.py` script is available in the [bismark-file-converter repository](https://github.com/hyeyeon-hwang/bismark-file-converter). This script should be placed in the same directory as the rest of this repository. If you do not wish to use this file converter, then the final calls in both the switch and controller scripts should be deleted. 
 
 ## Chastity Filtering
@@ -34,10 +54,23 @@ If they aren’t you can accomplish this on command line via, where you change J
 `zcat JLBL001*fastq.gz | zgrep -A 3 '^@.* [^:]*:N:[^:]*:' | zgrep -v "^--$" | gzip > JLBL001_filtered.fq.gz`
 
 ## How to use CpG_Me for paired end sequencing:
-1.	Create a parent directory 
-2.	Within that parent directory, add a text file called “task_samples.txt”, where each new line contains the entire sample name exactly as it appears on the fastq read pair files, aside from the end part (“_1.fq.gz” or “_2.fq.gz”). Only name a sample once, NOT twice, and make sure it is .fq.gz and not fastq.gz. Also, if you’re using excel or a windows desktop, you will need to change the linebreaks from windows to unix, which can be done using text wrangler.
+1.	Create a parent directory for the project
+2.	Within that parent project directory, add a text file called “task_samples.txt”, where each new line contains the entire sample name exactly as it appears on the fastq read pair files, aside from the end part (“_1.fq.gz” or “_2.fq.gz”). Only name a sample once, NOT twice, and make sure it is .fq.gz and not fastq.gz. Also, if you’re using excel or a windows desktop, you will need to change the linebreaks from windows to unix, which can be done using text wrangler.
 3.	Within that parent directory create a folder called “raw_sequences” that contains all raw paired fastq files (.fq.gz)
-4.	Now it’s ready to run, so FROM the parent directory, modify and run this command:
+
+Overall, the directory tree structure should be the following:
+
+```
+├── Project
+│   ├── raw_sequences
+│   │   ├── sample1_1.fq.gz
+│   │   ├── sample1_2.fq.gz
+│   │   ├── sample2_1.fq.gz
+│   │   ├── sample2_2.fq.gz
+│   ├── task_samples.txt
+```
+
+Now with that structure in place it’s ready to run, so FROM the parent directory, modify and run this command:
 
 `sbatch --array=1-12 /share/lasallelab/programs/CpG_Me/CpG_Me_PE_controller.sh  hg38`
 
@@ -52,7 +85,23 @@ There is also a final QC report to be run AFTER all samples have finished, which
 `sbatch /share/lasallelab/programs/CpG_Me/CpG_Me_QC_PE.sh` 
 
 ## How to use CpG_Me for single end sequencing:
-For single end sequencing (SE), follow the same approach as paired end (PE) but with calls to the SE scripts. 
+For single end sequencing (SE), follow the same approach as paired end (PE) with minor changes.
+
+The directory should appear as:
+
+```
+├── Project
+│   ├── raw_sequences
+│   │   ├── sample1.fq.gz
+│   │   ├── sample2.fq.gz
+│   ├── task_samples.txt
+```
+
+The calls to the scripts would be:
+
+`sbatch --array=1-12 /share/lasallelab/programs/CpG_Me/CpG_Me_SE_controller.sh  hg38`
+
+`sbatch /share/lasallelab/programs/CpG_Me/CpG_Me_QC_SE.sh` 
 
 ## Correcting for methylation bias (m-bias)
 [Methylation bias (m-bias)](https://www.ncbi.nlm.nih.gov/pubmed/23034175) is an artifact from sequencing approaches where the 5' and 3' ends contain artificial methylation levels due to the library preparation method. It is important to always examine for this bias in the MultiQC reports. CpG m-bias can be used to guide trimming options, while CpH m-bias can be used to judge for incomplete bisulfite conversion. In our experience, we have come across the following parameters, although we recommend to examine every dataset, particularly when trying a new library preparation method or sequencing platform. 
