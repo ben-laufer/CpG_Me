@@ -82,7 +82,7 @@ Let’s break this apart:
 
 There is also a final QC report to be run AFTER all samples have finished, which you also need to launch from the working directory
 
-`sbatch /share/lasallelab/programs/CpG_Me/Paired-end/CpG_Me_QC_PE.sh` 
+`sbatch /share/lasallelab/programs/CpG_Me/Paired-end/CpG_Me_PE_QC.sh` 
 
 ## How to use CpG_Me for single end sequencing:
 For single end sequencing (SE), follow the same approach as paired end (PE) with minor changes.
@@ -101,7 +101,7 @@ The calls to the scripts would be:
 
 `sbatch --array=1-12 /share/lasallelab/programs/CpG_Me/Single-end/CpG_Me_SE_controller.sh  hg38`
 
-`sbatch /share/lasallelab/programs/CpG_Me/Single-end/CpG_Me_QC_SE.sh` 
+`sbatch /share/lasallelab/programs/CpG_Me/Single-end/CpG_Me_SE_QC.sh` 
 
 ## Correcting for methylation bias (m-bias)
 [Methylation bias (m-bias)](https://www.ncbi.nlm.nih.gov/pubmed/23034175) is an artifact from sequencing approaches where the 5' and 3' ends contain artificial methylation levels due to the library preparation method. It is important to always examine for this bias in the MultiQC reports. CpG m-bias can be used to guide trimming options, while CpH m-bias can be used to judge for incomplete bisulfite conversion. In our experience, we have come across the following parameters, although we recommend to examine every dataset, particularly when trying a new library preparation method or sequencing platform. 
