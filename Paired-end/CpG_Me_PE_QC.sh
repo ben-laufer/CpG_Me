@@ -49,7 +49,7 @@ module load multiqc/1.6
 
 call="multiqc
 . \
- --config /share/lasallelab/programs/CpG_Me/multiqc_config_PE.yaml"
+ --config /share/lasallelab/programs/CpG_Me/Paired-end/multiqc_config_PE.yaml"
 
 echo $call
 eval $call
