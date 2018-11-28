@@ -1,7 +1,19 @@
 # CpG_Me
-### A whole-genome bisulfite sequencing (WGBS) pipeline for the analysis of DNA methylation
+#### A whole-genome bisulfite sequencing (WGBS) pipeline for the analysis of DNA methylation
 
-CpG_Me is a series of shell scripts that automate a WGBS workflow that takes you from raw fastq files to extracted CpG methylation count matrices, where it preprocesses data to remove biases and provides ample QC/QA. Scripts are available for both paired end (PE) and single end (SE) sequencing approaches. The extracted CpG methylation count matrices can be then be used for the identification of differentially methylated regions (DMRs) through the accompanying [DMRichR](https://github.com/ben-laufer/DMRichR) workflow.
+CpG_Me is a WGBS pipeline that takes you from raw fastq files to CpG methylation count matrices (Bismark cytosine reports), where it preprocesses data to remove biases and provides ample QC/QA. Scripts are available for both paired end (PE) and single end (SE) sequencing approaches. The extracted CpG methylation count matrices can be then be used for the identification of differentially methylated regions (DMRs) through the accompanying [DMRichR](https://github.com/ben-laufer/DMRichR) workflow.
+
+### Table of Contents
+
+1. [Installation](https://github.com/ben-laufer/CpG_Me#installation)
+2. [Chastity Filtering](https://github.com/ben-laufer/CpG_Me#chastity-filtering)
+3. [Paired End (PE) Sequencing](https://github.com/ben-laufer/CpG_Me#paired-end-pe-sequencing)
+4. [Single End (SE) Sequencing](https://github.com/ben-laufer/CpG_Me#single-end-se-sequencing)
+5. [Correcting for Methylation Bias (m-bias)](https://github.com/ben-laufer/CpG_Me#correcting-for-methylation-bias-m-bias)
+   1. [Paired End (PE)](https://github.com/ben-laufer/CpG_Me#paired-end)
+   2. [Single End (SE)](https://github.com/ben-laufer/CpG_Me#single-end)
+6. [Citation](https://github.com/ben-laufer/CpG_Me#citation)
+7. [Acknowledgements](https://github.com/ben-laufer/CpG_Me#acknowledgements)
 
 ## Installation
 
@@ -53,7 +65,7 @@ If they aren’t you can accomplish this on command line via, where you change J
 
 `zcat JLBL001*fastq.gz | zgrep -A 3 '^@.* [^:]*:N:[^:]*:' | zgrep -v "^--$" | gzip > JLBL001_filtered.fq.gz`
 
-## How to use CpG_Me for paired end sequencing:
+## Paired End (PE) Sequencing
 1.	Create a parent directory for the project
 2.	Within that parent project directory, add a text file called “task_samples.txt”, where each new line contains the entire sample name exactly as it appears on the fastq read pair files, aside from the end part (“_1.fq.gz” or “_2.fq.gz”). Only name a sample once, NOT twice, and make sure it is .fq.gz and not fastq.gz. Also, if you’re using excel or a windows desktop, you will need to change the linebreaks from windows to unix, which can be done using text wrangler.
 3.	Within that parent directory create a folder called “raw_sequences” that contains all raw paired fastq files (.fq.gz)
@@ -84,8 +96,8 @@ There is also a final QC report to be run AFTER all samples have finished, which
 
 `sbatch /share/lasallelab/programs/CpG_Me/Paired-end/CpG_Me_PE_QC.sh` 
 
-## How to use CpG_Me for single end sequencing:
-For single end sequencing (SE), follow the same approach as paired end (PE) with minor changes.
+## Single End (SE) Sequencing
+For single end sequencing, follow the same approach as paired end with minor changes.
 
 The directory should appear as:
 
@@ -103,16 +115,16 @@ The calls to the scripts would be:
 
 `sbatch /share/lasallelab/programs/CpG_Me/Single-end/CpG_Me_SE_QC.sh` 
 
-## Correcting for methylation bias (m-bias)
+## Correcting for Methylation Bias (m-bias)
 [Methylation bias (m-bias)](https://www.ncbi.nlm.nih.gov/pubmed/23034175) is an artifact from sequencing approaches where the 5' and 3' ends contain artificial methylation levels due to the library preparation method. It is important to always examine for this bias in the MultiQC reports. CpG m-bias can be used to guide trimming options, while CpH m-bias can be used to judge for incomplete bisulfite conversion. In our experience, we have come across the following parameters, although we recommend to examine every dataset, particularly when trying a new library preparation method or sequencing platform. 
 
-### Paired end (PE)
+### Paired End (PE)
 
 | Library preparation kit               | clip_r1 | clip_r2 | three_prime_clip_r1  | three_prime_clip_r2 | 
 | ------------------------------------- | ------- | ------- | -------------------- | ------------------- | 
 | TruSeq DNA Methylation Kit (EpiGnome) | 8       | 20      | 8                    | 8                   |
 
-### Single end (SE)
+### Single End (SE)
 
 | Library preparation kit               | clip_r1 | three_prime_clip_r1  | 
 | ------------------------------------- | ------- | -------------------- | 
