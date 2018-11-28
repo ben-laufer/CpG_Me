@@ -51,7 +51,7 @@ The genome folder structure should appear as:
 │   │   ├── mm10.fa.fai
 ```
 
-The paths will also need to be changed in the `controller`, `switch`, and `QC` scripts through the `mainPath` variable, where for our environment they begin with `/share/lasallelab/` and the scripts themselves are located in the `programs` folder. Finally, the paths will also need to changed in `fastq_screen.conf` and `multiqc_config.yaml` configuration files.
+The paths will also need to be changed in the `controller`, `switch`, and `QC` scripts through the `mainPath` variable, where for our environment they begin with `/share/lasallelab/` and the scripts themselves are located in the `programs` folder. Finally, the paths will also need to be changed in `fastq_screen.conf` and `multiqc_config.yaml` configuration files.
 
 The overall folder structure should appear as:
 
