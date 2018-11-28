@@ -11,13 +11,15 @@
 ##########################################################################################
 # Author: Ben Laufer
 # Email: blaufer@ucdavis.edu 
-# Last Update Date: 09-13-2018
-# Version: 1.0
-#
-# Summary QC reports and clean up for CpG_Me_SE
-#
-# If you use this, please cite:
 ##########################################################################################
+
+##############
+# Initialize #
+##############
+
+# Manually set mainPath
+
+mainPath=/share/lasallelab
 
 ###################
 # Run Information #
@@ -49,7 +51,7 @@ module load multiqc/1.6
 
 call="multiqc
 . \
- --config /share/lasallelab/programs/CpG_Me/Single-end/multiqc_config_SE.yaml"
+ --config ${mainPath}/programs/CpG_Me/Single-end/multiqc_config_SE.yaml"
 
 echo $call
 eval $call

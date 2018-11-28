@@ -29,7 +29,7 @@ I recommend using [Bioconda](https://bioconda.github.io) to install and manage t
 
 `conda install -c bioconda trim-galore bismark bowtie2 samtools fastq-screen multiqc`
 
-Bisulfite converted genomes will also have be created and placed in an external folder for the genome of interest as well as the genomes you would like to use to screen for contamination. This can be accomplished by using `bismark_genome_preparation`, which is detailed in the [Bismark docs](https://github.com/FelixKrueger/Bismark/tree/master/Docs), and example scripts are available in the Genome_preperation folder of this repository. These scripts expect that each bisulfite converted genome is located in a `genomes` folder, which contains a folder for each genome within it (i.e. `hg38`). The paths will also need to be changed in the scripts, where for our environment they begin with `/share/lasallelab/` and the scripts themselves are located in the `programs` folder.
+Bisulfite converted genomes will also have be created and placed in an external folder for the genome of interest as well as the genomes you would like to use to screen for contamination. This can be accomplished by using `bismark_genome_preparation`, which is detailed in the [Bismark docs](https://github.com/FelixKrueger/Bismark/tree/master/Docs), and example scripts are available in the Genome_preperation folder of this repository. These scripts expect that each bisulfite converted genome is located in a `genomes` folder, which contains a folder for each genome within it (i.e. `hg38`). 
 
 The genome folder structure should appear as:
 
@@ -49,6 +49,26 @@ The genome folder structure should appear as:
 │   │   ├── Bowtie2
 │   │   ├── mm10.fa
 │   │   ├── mm10.fa.fai
+```
+
+The paths will also need to be changed in the `controller`, `switch`, and `QC` scripts through the `mainPath` variable, where for our environment they begin with `/share/lasallelab/` and the scripts themselves are located in the `programs` folder. Finally, the paths will also need to changed in `fastq_screen.conf` and `multiqc_config.yaml` configuration files.
+
+The overall folder structure should appear as:
+
+```
+├── programs
+│   ├── CpG_Me
+│   │   ├── Genome-preperation
+│   │   ├── Paired-end
+│   │   ├── Single-end
+│   │   ├── fastq_screen.conf
+│   │   ├── Bismark_to_Permeth_DSS.py
+│   │   ├── README.md
+│   │   ├── LICENSE
+├── genomes
+│   ├── hg38
+│   ├── mm10
+
 ```
 
 Finally, if you are interested in using the output with [WGBS_tools](https://github.com/kwdunaway/WGBS_Tools/tree/perl_code) or [DMRfinder](https://github.com/cemordaunt/DMRfinder), the `Bismark_to_Permeth_DSS.py` script functions as a [file converter](https://github.com/hyeyeon-hwang/bismark-file-converter). If you do not wish to use this file converter, then the final calls in both the switch and controller scripts should be deleted. 

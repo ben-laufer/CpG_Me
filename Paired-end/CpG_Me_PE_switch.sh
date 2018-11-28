@@ -9,23 +9,15 @@
 ##########################################################################################
 # Author: Ben Laufer
 # Email: blaufer@ucdavis.edu 
-# Last Update Date: 09-13-2018
-# Version: 1.0
-#
-# Takes raw paired end fastq (.fq) files and provides raw CpG methylation levels
-# The resulting files can be analyzed with bsseq DMRfinder and WGBS_tools
-#
-# This workflow uses trim_galore, bismark, and bismark_coverage scripts
-# Trim_galore: filter for quality, remove adapters, trim methylation bias, and fastqc
-# Bismark: align, remove PCR duplicates, nucleotide coverage, extract methylation, 
-# merge CpGs, and QC report
-#
-# If you use this, please cite:
 ##########################################################################################
 
 ##############
 # Initialize #
 ##############
+
+# Manually set mainPath
+
+mainPath=/share/lasallelab
 
 # Command line arguments set the module and genome variables
 # Provide a task_samples.txt file of sample ids (no file extensions) with one per a line in working directory and a raw_sequences folder with paired fastq files (.fq.gz)
@@ -57,7 +49,7 @@ module load samtools/1.8
 module load bismark/0.20.0
 module load fastq_screen/0.11.4
 module load perl-libs/5.22.1
-export PYTHON_EGG_CACHE="/share/lasallelab/programs/CpG_Me"
+export PYTHON_EGG_CACHE="${mainPath}/programs/CpG_Me"
 
 ######################
 # Set Up Environment #
@@ -113,7 +105,7 @@ case $module in
           cd ${mappath}
 
           call="fastq_screen \
-          --conf /share/lasallelab/programs/CpG_Me/fastq_screen.conf \
+          --conf ${mainPath}/programs/CpG_Me/fastq_screen.conf \
           --bisulfite \
           ${trim1} \
           ${trim2}" 
@@ -131,7 +123,7 @@ case $module in
 
           call="bismark \
           -n 1 \
-          --genome /share/lasallelab/genomes/${genome}/ \
+          --genome ${mainPath}/genomes/${genome}/ \
           --multicore 6 \
           -1 ${trim1} \
           -2 ${trim2}"
@@ -172,7 +164,7 @@ case $module in
           cd ${mappath}
 
           call="bam2nuc \
-          --genome_folder /share/lasallelab/genomes/${genome}/ \
+          --genome_folder ${mainPath}/genomes/${genome}/ \
           ${dedupBAM}"
 
           echo $call
@@ -212,7 +204,7 @@ case $module in
           # Merge CpGs is an experimental feature
           call="coverage2cytosine \
           --output ${mappath}/${cov} \
-          --genome_folder /share/lasallelab/genomes/${genome}/ \
+          --genome_folder ${mainPath}/genomes/${genome}/ \
           --gzip \
           --merge_CpG \
           ${mappath}/${cov}"
@@ -237,7 +229,7 @@ case $module in
           cd ${mappath}
 
           pythonscript="python \
-          /share/lasallelab/programs/CpG_Me/Bismark_to_Permeth_DSS.py \
+          ${mainPath}/programs/CpG_Me/Bismark_to_Permeth_DSS.py \
           ${CpGmerge} \
           ${genome} \
           1"

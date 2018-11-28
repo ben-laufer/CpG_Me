@@ -29,6 +29,10 @@
 # Initialize #
 ##############
 
+# Manually set mainPath
+
+mainPath=/share/lasallelab
+
 # Command line arguments set genome and array variables
 # Provide a task_samples.txt file of sample ids (no file extensions) with one per a line in working directory and a raw_sequences folder with paired fastq files (.fq.gz)
 
@@ -51,7 +55,7 @@ jid1=$(sbatch \
 --ntasks=3 \
 --mem=3000 \
 --time=2-00:00:00 \
-/share/lasallelab/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
+${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
 trim \
 ${genome} \
 | cut -d " " -f 4)
@@ -68,7 +72,7 @@ jid2=$(sbatch \
 --ntasks=18 \
 --mem-per-cpu=5000 \
 --time=5-00:00:00 \
-/share/lasallelab/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
+${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
 align \
 ${genome} \
 | cut -d " " -f 4)
@@ -82,7 +86,7 @@ jid3=$(sbatch \
 --ntasks=1 \
 --mem=30000 \
 --time=2-00:00:00 \
-/share/lasallelab/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
+${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
 deduplicate \
 ${genome} \
 | cut -d " " -f 4) 
@@ -96,7 +100,7 @@ jid4=$(sbatch \
 --ntasks=1 \
 --mem=4000 \
 --time=2-00:00:00 \
-/share/lasallelab/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
+${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
 coverage \
 ${genome} \
 | cut -d " " -f 4) 
@@ -111,7 +115,7 @@ jid5=$(sbatch \
 --ntasks=18 \
 --mem-per-cpu=2000 \
 --time=2-00:00:00 \
-/share/lasallelab/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
+${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
 extract \
 ${genome} \
 | cut -d " " -f 4)
@@ -127,7 +131,7 @@ jid6=$(sbatch \
 --ntasks=3 \
 --mem-per-cpu=2000 \
 --time=2-00:00:00 \
-/share/lasallelab/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
+${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
 mergeCpGs \
 ${genome} \
 | cut -d " " -f 4)
@@ -141,7 +145,7 @@ sbatch \
 --ntasks=1 \
 --mem-per-cpu=25000 \
 --time=0-00:20:00 \
-/share/lasallelab/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
+${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
 format \
 ${genome}
 
