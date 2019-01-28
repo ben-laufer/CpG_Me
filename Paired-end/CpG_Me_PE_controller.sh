@@ -11,18 +11,6 @@
 ##########################################################################################
 # Author: Ben Laufer
 # Email: blaufer@ucdavis.edu 
-# Last Update Date: 09-13-2018
-# Version: 1.0
-#
-# Takes raw paired end fastq (.fq) files and provides raw CpG methylation levels
-# The resulting files can be analyzed with bsseq DMRfinder and WGBS_tools
-#
-# This workflow uses trim_galore, bismark, and bismark_coverage scripts
-# Trim_galore: filter for quality, remove adapters, trim methylation bias, and fastqc
-# Bismark: align, remove PCR duplicates, nucleotide coverage, extract methylation, 
-# merge CpGs, and QC report
-#
-# If you use this, please cite:
 ##########################################################################################
 
 ##############
