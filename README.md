@@ -5,15 +5,32 @@ CpG_Me is a WGBS pipeline that takes you from raw fastq files to CpG methylation
 
 ### Table of Contents
 
-1. [Installation](https://github.com/ben-laufer/CpG_Me#installation)
-2. [Chastity Filtering](https://github.com/ben-laufer/CpG_Me#chastity-filtering)
-3. [Paired End (PE) Sequencing](https://github.com/ben-laufer/CpG_Me#paired-end-pe-sequencing)
-4. [Single End (SE) Sequencing](https://github.com/ben-laufer/CpG_Me#single-end-se-sequencing)
-5. [Correcting for Methylation Bias (m-bias)](https://github.com/ben-laufer/CpG_Me#correcting-for-methylation-bias-m-bias)
+1. [Overview](https://github.com/ben-laufer/CpG_Me#overview)
+2. [Installation](https://github.com/ben-laufer/CpG_Me#installation)
+3. [Chastity Filtering](https://github.com/ben-laufer/CpG_Me#chastity-filtering)
+4. [Paired End (PE) Sequencing](https://github.com/ben-laufer/CpG_Me#paired-end-pe-sequencing)
+5. [Single End (SE) Sequencing](https://github.com/ben-laufer/CpG_Me#single-end-se-sequencing)
+6. [Correcting for Methylation Bias (m-bias)](https://github.com/ben-laufer/CpG_Me#correcting-for-methylation-bias-m-bias)
    1. [Paired End (PE)](https://github.com/ben-laufer/CpG_Me#paired-end)
    2. [Single End (SE)](https://github.com/ben-laufer/CpG_Me#single-end)
-6. [Citation](https://github.com/ben-laufer/CpG_Me#citation)
-7. [Acknowledgements](https://github.com/ben-laufer/CpG_Me#acknowledgements)
+7. [Citation](https://github.com/ben-laufer/CpG_Me#citation)
+8. [Acknowledgements](https://github.com/ben-laufer/CpG_Me#acknowledgements)
+
+## Overview
+
+A single command line call performs the following steps for all samples:
+
+1. Trim adapters and methylation bias
+2. Screen for contaminating genomes
+3. Align
+4. Remove PCR duplicates
+5. Calculate nucleotide frequencies (coverage)
+6. Extract CpG methylation
+7. Merge symmetric CpG sites
+8. Individual sample Quality control and analysis (QC/QA)
+9. Legacy file (DSS/DMRfinder) conversion
+
+A final command line call generates html QC/QA reports for all samples that easily enables the identification of failed samples and specifically what went wrong.
 
 ## Installation
 
