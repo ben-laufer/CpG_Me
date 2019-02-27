@@ -46,8 +46,8 @@ echo "Allocated memory: " $MEM
 module load trim_galore/0.5.0
 module load bowtie2/2.3.4.1
 module load samtools/1.8
-module load bismark/0.20.0
-module load fastq_screen/0.11.4
+module load bismark/0.20.1
+module load fastq_screen/0.13.0
 module load perl-libs/5.22.1
 export PYTHON_EGG_CACHE="${mainPath}/programs/CpG_Me"
 

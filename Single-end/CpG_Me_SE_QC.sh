@@ -41,9 +41,9 @@ echo "Allocated memory: " $MEM
 # Load Modules #
 ################
 
-module load bismark/0.20.0
+module load bismark/0.20.1
 module load perl-libs/5.22.1
-module load multiqc/1.6
+module load multiqc/1.7
 
 ###########
 # MultiQC #
