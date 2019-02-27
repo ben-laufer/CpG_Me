@@ -104,7 +104,7 @@ If they aren’t you can accomplish this on command line via, where you change J
 
 ## Paired End (PE) Sequencing
 1.	Create a parent directory for the project
-2.	Within that parent project directory, add a text file called “task_samples.txt”, where each new line contains the entire sample name exactly as it appears on the fastq read pair files, aside from the end part (“_1.fq.gz” or “_2.fq.gz”). Only name a sample once, NOT twice, and make sure it is .fq.gz and not fastq.gz. Also, if you’re using excel or a windows desktop, you will need to change the linebreaks from windows to unix, which can be done using text wrangler.
+2.	Within that parent project directory, add a text file called “task_samples.txt”, where each new line contains the entire sample name exactly as it appears on the fastq read pair files, aside from the end part (“_1.fq.gz” or “_2.fq.gz”). Only name a sample once, NOT twice, and make sure it is .fq.gz and not fastq.gz. Also, if you’re using excel or a windows desktop, you will need to change the linebreaks from windows to unix, which can be done using BBedit or `awk '{ sub("\r$", ""); print }' task_samples_windows.txt > task_samples.txt`
 3.	Within that parent directory create a folder called “raw_sequences” that contains all raw paired fastq files (.fq.gz)
 
 Overall, the directory tree structure should be the following:
