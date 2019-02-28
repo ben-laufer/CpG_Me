@@ -153,12 +153,14 @@ The calls to the scripts would be:
 ## QC report
 There is also a final html QC report that should be run AFTER all samples have finished, which you also need to launch from the working directory. 
 To generate the QC report for paired end sequencing data, the command is:
+
 `sbatch /share/lasallelab/programs/CpG_Me/Paired-end/CpG_Me_PE_QC.sh` 
 
 To generate the QC report for single end sequencing data, the command is:
+
 `sbatch /share/lasallelab/programs/CpG_Me/Single-end/CpG_Me_SE_QC.sh` 
 
-An [example report](example/multiqc_report.html) for single end sequencing is available in the `example` folder. There is currently a minor glitch in the paired end reports, where the temporary files for the different reads create empty columns. This can be fixed by clicking on the configure columns button above the general statistics table and re-selecting one of the visibile columns. Also, these reports can be customized by modifying the multiqc_config.yaml files. 
+An [example report](examples/multiqc_report.html) for single end sequencing is available in the `examples` folder. There is currently a minor glitch in the paired end reports, where the temporary files for the different reads create empty columns. This can be fixed by clicking on the configure columns button above the general statistics table and re-selecting one of the visibile columns. Also, these reports can be customized by modifying the multiqc_config.yaml files. 
 
 ## Correcting for Methylation Bias (m-bias)
 [Methylation bias (m-bias)](https://www.ncbi.nlm.nih.gov/pubmed/23034175) is a technical artifact where the 5' and 3' ends contain artificial methylation levels due to the library preparation method. One example is the random priming used in post-bisulfite adapter tagging (PBAT) methods. It is important to always examine for this bias in the MultiQC reports. CpG m-bias can be used to guide trimming options, while CpH m-bias can be used to judge for incomplete bisulfite conversion. In our experience, we have come across the following parameters, although we recommend to examine every dataset, particularly when trying a new library preparation method or sequencing platform. In paired end approaches, the 5' end of read 2 tends to show the largest m-bias.
