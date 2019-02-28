@@ -10,11 +10,12 @@ CpG_Me is a WGBS pipeline that takes you from raw fastq files to CpG methylation
 3. [Chastity Filtering](https://github.com/ben-laufer/CpG_Me#chastity-filtering)
 4. [Paired End (PE) Sequencing](https://github.com/ben-laufer/CpG_Me#paired-end-pe-sequencing)
 5. [Single End (SE) Sequencing](https://github.com/ben-laufer/CpG_Me#single-end-se-sequencing)
-6. [Correcting for Methylation Bias (m-bias)](https://github.com/ben-laufer/CpG_Me#correcting-for-methylation-bias-m-bias)
+6. [QC Report](https://github.com/ben-laufer/CpG_Me#qc-report)
+7. [Correcting for Methylation Bias (m-bias)](https://github.com/ben-laufer/CpG_Me#correcting-for-methylation-bias-m-bias)
    1. [Paired End (PE)](https://github.com/ben-laufer/CpG_Me#paired-end)
    2. [Single End (SE)](https://github.com/ben-laufer/CpG_Me#single-end)
-7. [Citation](https://github.com/ben-laufer/CpG_Me#citation)
-8. [Acknowledgements](https://github.com/ben-laufer/CpG_Me#acknowledgements)
+8. [Citation](https://github.com/ben-laufer/CpG_Me#citation)
+9. [Acknowledgements](https://github.com/ben-laufer/CpG_Me#acknowledgements)
 
 ## Overview
 
@@ -104,8 +105,10 @@ If they aren’t you can accomplish this on command line via, where you change J
 
 ## Paired End (PE) Sequencing
 1.	Create a parent directory for the project
-2.	Within that parent project directory, add a text file called “task_samples.txt”, where each new line contains the entire sample name exactly as it appears on the fastq read pair files, aside from the end part (“_1.fq.gz” or “_2.fq.gz”). Only name a sample once, NOT twice, and make sure it is .fq.gz and not fastq.gz. Also, if you’re using excel or a windows desktop, you will need to change the linebreaks from windows to unix, which can be done using BBedit or:
+2.	Within that parent project directory, add a text file called “task_samples.txt”, where each new line contains the entire sample name exactly as it appears on the fastq read pair files, aside from the end part (“_1.fq.gz” or “_2.fq.gz”). Only name a sample once, NOT twice, and make sure it is .fq.gz and not fastq.gz. Also, if you’re using excel or a windows desktop, you will need to change the linebreaks from windows to unix, which can be done using BBedit (File > Save As... > Line Breaks > Unix) or on command line (but make sure the files have different names):
+
  `awk '{ sub("\r$", ""); print }' task_samples_windows.txt > task_samples.txt`
+ 
 3.	Within that parent directory create a folder called “raw_sequences” that contains all raw paired fastq files (.fq.gz)
 
 Overall, the directory tree structure should be the following:
@@ -130,10 +133,6 @@ Let’s break this apart:
 3)	The next call is the location of the executable shell script that will schedule all jobs with proper resources and dependencies on a per sample basis
 4)	Genome (hg38, rheMac8, mm10, rn6)
 
-There is also a final QC report to be run AFTER all samples have finished, which you also need to launch from the working directory
-
-`sbatch /share/lasallelab/programs/CpG_Me/Paired-end/CpG_Me_PE_QC.sh` 
-
 ## Single End (SE) Sequencing
 For single end sequencing, follow the same approach as paired end with minor changes.
 
@@ -151,10 +150,18 @@ The calls to the scripts would be:
 
 `sbatch --array=1-12 /share/lasallelab/programs/CpG_Me/Single-end/CpG_Me_SE_controller.sh  hg38`
 
+## QC report
+There is also a final html QC report that should be run AFTER all samples have finished, which you also need to launch from the working directory. 
+To generate the QC report for paired end sequencing data, the command is:
+`sbatch /share/lasallelab/programs/CpG_Me/Paired-end/CpG_Me_PE_QC.sh` 
+
+To generate the QC report for single end sequencing data, the command is:
 `sbatch /share/lasallelab/programs/CpG_Me/Single-end/CpG_Me_SE_QC.sh` 
 
+An [example report](example/multiqc_report.html) for single end sequencing is available in the `example` folder. There is currently a minor glitch in the paired end reports, where the temporary files for the different reads create empty columns. This can be fixed by clicking on the configure columns button above the general statistics table and re-selecting one of the visibile columns. Also, these reports can be customized by modifying the multiqc_config.yaml files. 
+
 ## Correcting for Methylation Bias (m-bias)
-[Methylation bias (m-bias)](https://www.ncbi.nlm.nih.gov/pubmed/23034175) is an artifact from sequencing approaches where the 5' and 3' ends contain artificial methylation levels due to the library preparation method. It is important to always examine for this bias in the MultiQC reports. CpG m-bias can be used to guide trimming options, while CpH m-bias can be used to judge for incomplete bisulfite conversion. In our experience, we have come across the following parameters, although we recommend to examine every dataset, particularly when trying a new library preparation method or sequencing platform. 
+[Methylation bias (m-bias)](https://www.ncbi.nlm.nih.gov/pubmed/23034175) is a technical artifact where the 5' and 3' ends contain artificial methylation levels due to the library preparation method. One example is the random priming used in post-bisulfite adapter tagging (PBAT) methods. It is important to always examine for this bias in the MultiQC reports. CpG m-bias can be used to guide trimming options, while CpH m-bias can be used to judge for incomplete bisulfite conversion. In our experience, we have come across the following parameters, although we recommend to examine every dataset, particularly when trying a new library preparation method or sequencing platform. In paired end approaches, the 5' end of read 2 tends to show the largest m-bias.
 
 ### Paired End (PE)
 
