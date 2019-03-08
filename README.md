@@ -11,6 +11,7 @@ CpG_Me is a WGBS pipeline that takes you from raw fastq files to CpG methylation
 4. [Correcting for Methylation Bias (m-bias)](https://github.com/ben-laufer/CpG_Me#correcting-for-methylation-bias-m-bias)
    1. [Paired End (PE)](https://github.com/ben-laufer/CpG_Me#paired-end)
    2. [Single End (SE)](https://github.com/ben-laufer/CpG_Me#single-end)
+   3. [M-bias Examples](https://github.com/ben-laufer/CpG_Me#m-bias-examples)
 5. [Paired End (PE) Sequencing](https://github.com/ben-laufer/CpG_Me#paired-end-pe-sequencing)
 6. [Single End (SE) Sequencing](https://github.com/ben-laufer/CpG_Me#single-end-se-sequencing)
 7. [QC Report](https://github.com/ben-laufer/CpG_Me#qc-report)
@@ -105,7 +106,9 @@ If they aren’t you can accomplish this on command line via, where you change J
 `zcat JLBL001*fastq.gz | zgrep -A 3 '^@.* [^:]*:N:[^:]*:' | zgrep -v "^--$" | gzip > JLBL001_filtered.fq.gz`
 
 ## Correcting for Methylation Bias (m-bias)
-[Methylation bias (m-bias)](https://github.com/FelixKrueger/Bismark/tree/master/Docs#m-bias-plot) is a technical artifact where the 5' and 3' ends of reads contain artificial methylation levels due to the library preparation method (see Figure 2 in [Hansen *et al.*](https://www.ncbi.nlm.nih.gov/pubmed/23034175)). One example is the random priming used in post-bisulfite adapter tagging (PBAT) methods (read more [here](https://sequencing.qcfail.com/articles/mispriming-in-pbat-libraries-causes-methylation-bias-and-poor-mapping-efficiencies/)). In paired-end sequencing approaches, the m-bias can also differ between reads 1 and 2 (read more [here](https://sequencing.qcfail.com/articles/library-end-repair-reaction-introduces-methylation-biases-in-paired-end-pe-bisulfite-seq-applications/)). Therefore, it is important to always examine for this bias in the MultiQC reports. CpG m-bias can be used to guide trimming options, while CpH m-bias can be used to judge for incomplete bisulfite conversion. In our experience, we have come across the following parameters, although we recommend to examine every dataset, particularly when trying a new library preparation method or sequencing platform. In paired end approaches, the 5' end of read 2 tends to show the largest m-bias. The following parameters should be customized in `CpG_Me_switch.sh` script.
+[Methylation bias (m-bias)](https://github.com/FelixKrueger/Bismark/tree/master/Docs#m-bias-plot) is a technical artifact where the 5' and 3' ends of reads contain artificial methylation levels due to the library preparation method (see Figure 2 in [Hansen *et al.*](https://www.ncbi.nlm.nih.gov/pubmed/23034175)). One example is the random priming used in post-bisulfite adapter tagging (PBAT) methods (read more [here](https://sequencing.qcfail.com/articles/mispriming-in-pbat-libraries-causes-methylation-bias-and-poor-mapping-efficiencies/)). In paired-end sequencing approaches, the m-bias can also differ between reads 1 and 2 (read more [here](https://sequencing.qcfail.com/articles/library-end-repair-reaction-introduces-methylation-biases-in-paired-end-pe-bisulfite-seq-applications/)). Therefore, it is important to always examine for this bias in the MultiQC reports. CpG m-bias can be used to guide trimming options, while CpH m-bias can be used to judge for incomplete bisulfite conversion. In our experience, we have come across the following parameters, although we recommend to examine every dataset, particularly when trying a new library preparation method or sequencing platform. In paired end approaches, the 5' end of read 2 tends to show the largest m-bias. 
+
+To address m-bias, the following parameters should be customized in the `CpG_Me_switch.sh` script:
 
 ### Paired End (PE)
 
@@ -120,6 +123,14 @@ If they aren’t you can accomplish this on command line via, where you change J
 | ------------------------------------- | ------- | -------------------- | 
 | TruSeq DNA Methylation Kit (EpiGnome) | 8       |  8                   | 
 | MethylC-Seq (Original Method)         | 7       |  10                  |
+
+### M-Bias Examples
+
+**Read 1**
+![Read 1 M-Bias](Examples/mbias_r1.jpeg)
+
+**Read 2**
+![Read 2 M-Bias](Examples/mbias_r2.jpeg)
 
 ## Paired End (PE) Sequencing
 1.	Create a parent directory for the project
