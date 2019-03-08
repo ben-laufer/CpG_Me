@@ -38,7 +38,7 @@ hostname
 # Trim #
 ########
 
-# M-bias correction Illumina's TruSeq DNA Methylation Kit
+# M-bias correction
 jid1=$(sbatch \
 --ntasks=3 \
 --mem=3000 \

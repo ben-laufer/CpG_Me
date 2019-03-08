@@ -8,12 +8,13 @@ CpG_Me is a WGBS pipeline that takes you from raw fastq files to CpG methylation
 1. [Overview](https://github.com/ben-laufer/CpG_Me#overview)
 2. [Installation](https://github.com/ben-laufer/CpG_Me#installation)
 3. [Chastity Filtering](https://github.com/ben-laufer/CpG_Me#chastity-filtering)
-4. [Paired End (PE) Sequencing](https://github.com/ben-laufer/CpG_Me#paired-end-pe-sequencing)
-5. [Single End (SE) Sequencing](https://github.com/ben-laufer/CpG_Me#single-end-se-sequencing)
-6. [QC Report](https://github.com/ben-laufer/CpG_Me#qc-report)
-7. [Correcting for Methylation Bias (m-bias)](https://github.com/ben-laufer/CpG_Me#correcting-for-methylation-bias-m-bias)
+4. [Correcting for Methylation Bias (m-bias)](https://github.com/ben-laufer/CpG_Me#correcting-for-methylation-bias-m-bias)
    1. [Paired End (PE)](https://github.com/ben-laufer/CpG_Me#paired-end)
    2. [Single End (SE)](https://github.com/ben-laufer/CpG_Me#single-end)
+5. [Paired End (PE) Sequencing](https://github.com/ben-laufer/CpG_Me#paired-end-pe-sequencing)
+6. [Single End (SE) Sequencing](https://github.com/ben-laufer/CpG_Me#single-end-se-sequencing)
+7. [QC Report](https://github.com/ben-laufer/CpG_Me#qc-report)
+
 8. [Citation](https://github.com/ben-laufer/CpG_Me#citation)
 9. [Acknowledgements](https://github.com/ben-laufer/CpG_Me#acknowledgements)
 
@@ -103,6 +104,23 @@ If they aren’t you can accomplish this on command line via, where you change J
 
 `zcat JLBL001*fastq.gz | zgrep -A 3 '^@.* [^:]*:N:[^:]*:' | zgrep -v "^--$" | gzip > JLBL001_filtered.fq.gz`
 
+## Correcting for Methylation Bias (m-bias)
+[Methylation bias (m-bias)](https://www.ncbi.nlm.nih.gov/pubmed/23034175) is a technical artifact where the 5' and 3' ends contain artificial methylation levels due to the library preparation method. One example is the random priming used in post-bisulfite adapter tagging (PBAT) methods. It is important to always examine for this bias in the MultiQC reports. CpG m-bias can be used to guide trimming options, while CpH m-bias can be used to judge for incomplete bisulfite conversion. In our experience, we have come across the following parameters, although we recommend to examine every dataset, particularly when trying a new library preparation method or sequencing platform. In paired end approaches, the 5' end of read 2 tends to show the largest m-bias. The following parameters should be customized in `CpG_Me_switch.sh` script.
+
+### Paired End (PE)
+
+| Library preparation kit               | clip_r1 | clip_r2 | three_prime_clip_r1  | three_prime_clip_r2 | 
+| ------------------------------------- | ------- | ------- | -------------------- | ------------------- | 
+| Accel-NGS Methyl-Seq Kit (Swift)      | 10      | 20      | 10                   | 10                  |
+| TruSeq DNA Methylation Kit (EpiGnome) | 8       | 20      | 8                    | 8                   |
+
+### Single End (SE)
+
+| Library preparation kit               | clip_r1 | three_prime_clip_r1  | 
+| ------------------------------------- | ------- | -------------------- | 
+| TruSeq DNA Methylation Kit (EpiGnome) | 8       |  8                   | 
+| MethylC-Seq (Original Method)         | 7       |  10                  |
+
 ## Paired End (PE) Sequencing
 1.	Create a parent directory for the project
 2.	Within that parent project directory, add a text file called “task_samples.txt”, where each new line contains the entire sample name exactly as it appears on the fastq read pair files, aside from the end part (“_1.fq.gz” or “_2.fq.gz”). Only name a sample once, NOT twice, and make sure it is .fq.gz and not fastq.gz. Also, if you’re using excel or a windows desktop, you will need to change the linebreaks from windows to unix, which can be done using BBedit (File > Save As... > Line Breaks > Unix) or on command line (but make sure the files have different names):
@@ -122,6 +140,8 @@ Overall, the directory tree structure should be the following:
 │   │   ├── sample2_2.fq.gz
 │   ├── task_samples.txt
 ```
+
+4. Ensure the trimming options in the [switch script](Paired-end/CpG_Me_PE_switch.sh) are appropriate for the [Methylation Bias (m-bias) of your library preparation method](https://github.com/ben-laufer/CpG_Me#correcting-for-methylation-bias-m-bias) as well as your sequencing chemistry. The HiSeq and MiSeq series of sequencers use a 4 color chemistry, while NovaSeq and NextSeq series use a 2 color chemistry. For a 4 color chemistry you should use `--quality 20`, while for 2 color chemistry you should use ``--2colour 20`.
 
 Now with that structure in place it’s ready to run, so FROM the parent directory, modify and run this command:
 
@@ -161,22 +181,6 @@ To generate the QC report for single end sequencing data, the command is:
 `sbatch /share/lasallelab/programs/CpG_Me/Single-end/CpG_Me_SE_QC.sh` 
 
 An [example report](Examples/multiqc_report.html) for single end sequencing is available in the `Examples` folder. There is currently a minor glitch in the paired end reports, where the temporary files for the different reads create empty columns. This can be fixed by clicking on the configure columns button above the general statistics table and re-selecting one of the visibile columns. Also, these reports can be customized by modifying the multiqc_config.yaml files for the [paired end](Paired-end/multiqc_config_PE.yaml) and [single end](Single-end/multiqc_config_SE.yaml) pipelines. 
-
-## Correcting for Methylation Bias (m-bias)
-[Methylation bias (m-bias)](https://www.ncbi.nlm.nih.gov/pubmed/23034175) is a technical artifact where the 5' and 3' ends contain artificial methylation levels due to the library preparation method. One example is the random priming used in post-bisulfite adapter tagging (PBAT) methods. It is important to always examine for this bias in the MultiQC reports. CpG m-bias can be used to guide trimming options, while CpH m-bias can be used to judge for incomplete bisulfite conversion. In our experience, we have come across the following parameters, although we recommend to examine every dataset, particularly when trying a new library preparation method or sequencing platform. In paired end approaches, the 5' end of read 2 tends to show the largest m-bias.
-
-### Paired End (PE)
-
-| Library preparation kit               | clip_r1 | clip_r2 | three_prime_clip_r1  | three_prime_clip_r2 | 
-| ------------------------------------- | ------- | ------- | -------------------- | ------------------- | 
-| TruSeq DNA Methylation Kit (EpiGnome) | 8       | 20      | 8                    | 8                   |
-
-### Single End (SE)
-
-| Library preparation kit               | clip_r1 | three_prime_clip_r1  | 
-| ------------------------------------- | ------- | -------------------- | 
-| TruSeq DNA Methylation Kit (EpiGnome) | 8       |  8                   | 
-| MethylC-Seq (Original Method)         | 7       |  10                  |
 
 ## Citation
 

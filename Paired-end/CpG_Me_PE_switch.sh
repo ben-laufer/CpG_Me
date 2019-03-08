@@ -43,10 +43,8 @@ echo "Allocated memory: " $MEM
 # Load Modules #
 ################
 
-module load trim_galore/0.5.0
-module load bowtie2/2.3.4.1
-module load samtools/1.8
-module load bismark/0.20.0
+module load trim_galore/0.6.0
+module load bismark/0.20.1
 module load fastq_screen/0.13.0
 export PYTHON_EGG_CACHE="${mainPath}/programs/CpG_Me"
 
@@ -81,14 +79,16 @@ case $module in
           
           mkdir ${mappath}
 
-          # M-bias correction Illumina's TruSeq DNA Methylation Kit
+          # M-bias correction Swift's Accel NGS 
+          # Use 2color for NovaSeq and NextSeq, replace with quality for HiSeq and MiSeq
           call="trim_galore \
           --paired \
+          --2colour 20 \
           --fastqc \
-          --clip_r1 8 \
+          --clip_r1 10 \
           --clip_r2 20 \
-          --three_prime_clip_r1 8 \
-          --three_prime_clip_r2 8 \
+          --three_prime_clip_r1 10 \
+          --three_prime_clip_r2 10 \
           --output_dir ${mappath} \
           ${fastq1} \
           ${fastq2}" 

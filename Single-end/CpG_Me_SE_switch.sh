@@ -43,10 +43,8 @@ echo "Allocated memory: " $MEM
 # Load Modules #
 ################
 
-module load trim_galore/0.5.0
-module load bowtie2/2.3.4.1
-module load samtools/1.8
-module load bismark/0.20.0
+module load trim_galore/0.6.0
+module load bismark/0.20.1
 module load fastq_screen/0.13.0
 export PYTHON_EGG_CACHE="${mainPath}/programs/CpG_Me"
 
@@ -81,6 +79,7 @@ case $module in
 
           # M-bias correction MethylC-seq library preparation method
           call="trim_galore \
+          --quality 20 \
           --fastqc \
           --clip_r1 7 \
           --three_prime_clip_r1 10 \
