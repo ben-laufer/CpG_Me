@@ -44,7 +44,7 @@ echo "Allocated memory: " $MEM
 ################
 
 module load trim_galore/0.6.0
-module load bismark/0.20.1
+module load bismark/0.20.0
 module load fastq_screen/0.13.0
 export PYTHON_EGG_CACHE="${mainPath}/programs/CpG_Me"
 

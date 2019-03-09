@@ -11,7 +11,7 @@ CpG_Me is a WGBS pipeline that takes you from raw fastq files to CpG methylation
 4. [Correcting for Methylation Bias (m-bias)](https://github.com/ben-laufer/CpG_Me#correcting-for-methylation-bias-m-bias)
    1. [Paired End (PE)](https://github.com/ben-laufer/CpG_Me#paired-end)
    2. [Single End (SE)](https://github.com/ben-laufer/CpG_Me#single-end)
-   3. [M-bias Examples](https://github.com/ben-laufer/CpG_Me#m-bias-examples)
+   3. [M-Bias Examples](https://github.com/ben-laufer/CpG_Me#m-bias-examples)
 5. [Paired End (PE) Sequencing](https://github.com/ben-laufer/CpG_Me#paired-end-pe-sequencing)
 6. [Single End (SE) Sequencing](https://github.com/ben-laufer/CpG_Me#single-end-se-sequencing)
 7. [QC Report](https://github.com/ben-laufer/CpG_Me#qc-report)
