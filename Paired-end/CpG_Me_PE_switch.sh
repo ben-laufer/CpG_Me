@@ -17,7 +17,7 @@
 
 # Manually set mainPath
 
-mainPath=/share/lasallelab
+export mainPath="/share/lasallelab"
 
 # Command line arguments set the module and genome variables
 # Provide a task_samples.txt file of sample ids (no file extensions) with one per a line in working directory and a raw_sequences folder with paired fastq files (.fq.gz)
@@ -44,7 +44,9 @@ echo "Allocated memory: " $MEM
 ################
 
 module load trim_galore/0.6.0
-module load bismark/0.20.0
+PATH="$PATH:${mainPath}/programs/CpG_Me/Bismark-master/"
+module load bowtie2/2.3.4.1
+module load samtools/1.9
 module load fastq_screen/0.13.0
 export PYTHON_EGG_CACHE="${mainPath}/programs/CpG_Me"
 

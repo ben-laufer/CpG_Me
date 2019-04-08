@@ -19,7 +19,7 @@
 
 # Manually set mainPath
 
-mainPath=/share/lasallelab
+export mainPath="/share/lasallelab"
 
 ###################
 # Run Information #
@@ -41,7 +41,9 @@ echo "Allocated memory: " $MEM
 # Load Modules #
 ################
 
-module load bismark/0.20.0
+PATH="$PATH:${mainPath}/programs/CpG_Me/Bismark-master/"
+module load bowtie2/2.3.4.1
+module load samtools/1.9
 module load multiqc/1.7
 
 ###########

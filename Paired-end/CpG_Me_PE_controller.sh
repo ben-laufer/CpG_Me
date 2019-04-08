@@ -19,7 +19,7 @@
 
 # Manually set mainPath
 
-mainPath=/share/lasallelab
+export mainPath="/share/lasallelab"
 
 # Command line arguments set genome and array variables
 # Provide a task_samples.txt file of sample ids (no file extensions) with one per a line in working directory and a raw_sequences folder with paired fastq files (.fq.gz)
@@ -41,7 +41,7 @@ hostname
 # M-bias correction
 jid1=$(sbatch \
 --ntasks=3 \
---mem=3000 \
+--mem-per-cpu=1000 \
 --time=2-00:00:00 \
 ${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
 trim \
@@ -72,7 +72,7 @@ ${genome} \
 jid3=$(sbatch \
 --dependency=afterok:$jid2 \
 --ntasks=1 \
---mem=30000 \
+--mem-per-cpu=30000 \
 --time=2-00:00:00 \
 ${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
 deduplicate \
@@ -86,7 +86,7 @@ ${genome} \
 jid4=$(sbatch \
 --dependency=afterok:$jid3 \
 --ntasks=1 \
---mem=4000 \
+--mem-per-cpu=4000 \
 --time=2-00:00:00 \
 ${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
 coverage \
