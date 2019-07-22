@@ -8,16 +8,17 @@ CpG_Me is a WGBS pipeline that takes you from raw fastq files to CpG methylation
 1. [Overview](https://github.com/ben-laufer/CpG_Me#overview)
 2. [Installation](https://github.com/ben-laufer/CpG_Me#installation)
 3. [Chastity Filtering](https://github.com/ben-laufer/CpG_Me#chastity-filtering)
-4. [Correcting for Methylation Bias (m-bias)](https://github.com/ben-laufer/CpG_Me#correcting-for-methylation-bias-m-bias)
+4. [Merging Lanes](https://github.com/ben-laufer/CpG_Me#merging-lanes)
+5. [Correcting for Methylation Bias (m-bias)](https://github.com/ben-laufer/CpG_Me#correcting-for-methylation-bias-m-bias)
    1. [Paired End (PE)](https://github.com/ben-laufer/CpG_Me#paired-end)
    2. [Single End (SE)](https://github.com/ben-laufer/CpG_Me#single-end)
    3. [M-Bias Examples](https://github.com/ben-laufer/CpG_Me#m-bias-examples)
-5. [Paired End (PE) Sequencing](https://github.com/ben-laufer/CpG_Me#paired-end-pe-sequencing)
-6. [Single End (SE) Sequencing](https://github.com/ben-laufer/CpG_Me#single-end-se-sequencing)
-7. [QC Report](https://github.com/ben-laufer/CpG_Me#qc-report)
+6. [Paired End (PE) Sequencing](https://github.com/ben-laufer/CpG_Me#paired-end-pe-sequencing)
+7. [Single End (SE) Sequencing](https://github.com/ben-laufer/CpG_Me#single-end-se-sequencing)
+8. [QC Report](https://github.com/ben-laufer/CpG_Me#qc-report)
 
-8. [Citation](https://github.com/ben-laufer/CpG_Me#citation)
-9. [Acknowledgements](https://github.com/ben-laufer/CpG_Me#acknowledgements)
+9. [Citation](https://github.com/ben-laufer/CpG_Me#citation)
+10. [Acknowledgements](https://github.com/ben-laufer/CpG_Me#acknowledgements)
 
 ## Overview
 
@@ -104,6 +105,36 @@ You can check by using the following command, where file.fastq.gz represents you
 If they aren’t you can accomplish this on command line via, where you change JLBL001 to your sample name
 
 `zcat JLBL001*fastq.gz | zgrep -A 3 '^@.* [^:]*:N:[^:]*:' | zgrep -v "^--$" | gzip > JLBL001_filtered.fq.gz`
+
+## Merging Lanes
+
+For large-scale studies, there are often more samples than can fit on a single lane of sequencing. Even the NovaSeq has its limits and we generally recommend not to pool more than 48 samples per a NovaSeq lane for this low-coverage WGBS workflow. However, lane effects are a significant source of [batch effects](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3880143/) in any high-throughput sequencing experiment. In order to combat this source of technical bias, which is often stronger than biological signal, we create a large library pool (up to 96 samples with dual indices) and then repeatedly sequence that library pool across multiple lanes. A MiSeq run of this pool is also a great QC/QA step that helps with balancing the library pool before the large sequencing commitment.
+
+Once you have your sequencing results, the most straightforward approach to merging the results of multiple lanes of data for the same sample is as follows (see [ref](https://www.biostars.org/p/317385/)):
+
+1. Check to for right number of unique sample IDs for both R1 and R2
+
+``ls -1 *R1*.gz | awk -F '_' '{print $1}' | sort | uniq | wc -l``
+
+``ls -1 *R2*.gz | awk -F '_' '{print $1}' | sort | uniq | wc -l``
+
+2. Create file of unique IDs based on _ delimiter and first string (use file for CpG_Me)
+
+``ls -1 *fastq.gz | awk -F '_' '{print $1}' | sort | uniq > task_samples.txt``
+
+3. Test merge commands for each read (look over each one carefully)
+
+``for i in `cat ./task_samples.txt`; do echo cat $i\_*_R1_001.fastq.gz \> $i\_merged_R1.fastq.gz; done``
+
+``for i in `cat ./task_samples.txt`; do echo cat $i\_*_R2_001.fastq.gz \> $i\_merged_R2.fastq.gz; done``
+
+4. Use merge commands for each read by removing echo and the escape character on >
+
+``for i in `cat ./task_samples.txt`; do cat $i\_*_R1_001.fastq.gz > $i\_1.fq.gz; done``
+
+``for i in `cat ./task_samples.txt`; do cat $i\_*_R2_001.fastq.gz > $i\_2.fq.gz; done``
+
+Now, not only are your samples merged across lanes, but you now also have your `task_samples.txt` file for the next steps.
 
 ## Correcting for Methylation Bias (m-bias)
 [Methylation bias (m-bias)](https://github.com/FelixKrueger/Bismark/tree/master/Docs#m-bias-plot) is a technical artifact where the 5' and 3' ends of reads contain artificial methylation levels due to the library preparation method (see Figure 2 in [Hansen *et al.*](https://www.ncbi.nlm.nih.gov/pubmed/23034175)). One example is the random priming used in post-bisulfite adapter tagging (PBAT) methods (read more [here](https://sequencing.qcfail.com/articles/mispriming-in-pbat-libraries-causes-methylation-bias-and-poor-mapping-efficiencies/)). In paired-end sequencing approaches, the m-bias can also differ between reads 1 and 2 (read more [here](https://sequencing.qcfail.com/articles/library-end-repair-reaction-introduces-methylation-biases-in-paired-end-pe-bisulfite-seq-applications/)). Therefore, it is important to always examine for this bias in the MultiQC reports. CpG m-bias can be used to guide trimming options, while CpH m-bias can be used to judge for incomplete bisulfite conversion. In our experience, we have come across the following parameters, although we recommend to examine every dataset, particularly when trying a new library preparation method or sequencing platform. In paired end approaches, the 5' end of read 2 tends to show the largest m-bias. 
