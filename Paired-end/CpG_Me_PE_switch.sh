@@ -47,7 +47,7 @@ module load trim_galore/0.6.0
 PATH="$PATH:${mainPath}/programs/CpG_Me/Bismark-master/"
 module load bowtie2/2.3.4.1
 module load samtools/1.9
-module load fastq_screen/0.13.0
+PATH="$PATH:${mainPath}/programs/CpG_Me/fastq_screen_v0.14.0/"
 export PYTHON_EGG_CACHE="${mainPath}/programs/CpG_Me"
 
 ######################
@@ -179,18 +179,38 @@ case $module in
           cd ${mappath}
 
           # Each multicore needs 3 cores, 2GB overhead on buffer --split_by_chromosome \
-          call="bismark_methylation_extractor \
-          --paired-end \
-          --gzip \
-          --comprehensive \
-          --merge_non_CpG \
-          --bedGraph \
-          --multicore 6 \
-          --buffer_size 34G \
-          ${dedupBAM}"
+          # Use --scaffolds for genomes with many contigs
+          if [ $genome == "rheMac8" ]
+          then
+          	call="bismark_methylation_extractor \
+          	--paired-end \
+          	--gzip \
+          	--comprehensive \
+          	--merge_non_CpG \
+          	--bedGraph \
+          	--multicore 6 \
+          	--scaffolds \
+          	--buffer_size 34G \
+          	${dedupBAM}"
 
-          echo $call
-          eval $call
+          	echo $call
+          	eval $call
+          
+          else
+          
+          call="bismark_methylation_extractor \
+          	--paired-end \
+          	--gzip \
+          	--comprehensive \
+          	--merge_non_CpG \
+          	--bedGraph \
+          	--multicore 6 \
+          	--buffer_size 34G \
+          	${dedupBAM}"
+
+          	echo $call
+          	eval $call	
+          fi
           
           rm ${CpH}
           ;;
