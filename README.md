@@ -5,7 +5,8 @@ CpG_Me is a WGBS pipeline that takes you from raw fastq files to CpG methylation
 
 ### Table of Contents
 
-1. [Overview](https://github.com/ben-laufer/CpG_Me#overview)
+0. [Overview](https://github.com/ben-laufer/CpG_Me#overview)
+1. [Quick Start](https://github.com/ben-laufer/CpG_Me#quick-start)
 2. [Installation](https://github.com/ben-laufer/CpG_Me#installation)
 3. [Chastity Filtering](https://github.com/ben-laufer/CpG_Me#chastity-filtering)
 4. [Merging Lanes](https://github.com/ben-laufer/CpG_Me#merging-lanes)
@@ -31,10 +32,20 @@ A single command line call performs the following steps for all samples:
 5. Calculate nucleotide frequencies (coverage)
 6. Extract CpG methylation
 7. Merge symmetric CpG sites
-8. Individual sample Quality control and analysis (QC/QA)
+8. Individual sample quality control and analysis (QC/QA)
 9. Legacy file (DSS/DMRfinder) conversion
 
 A final command line call generates html QC/QA reports for all samples that easily enables the identification of failed samples and specifically what went wrong.
+
+## Quick Start
+
+Assuming everything is installed and that you have paired-end 150 bp reads from the NovaSeq, where Swift's Accel-NGS Methyl-Seq Kit kit was used for library preparation, all you need to do is change to your working directory and run the following command for the human genome:
+
+`sbatch --array=1-96 /share/lasallelab/programs/CpG_Me/Paired-end/CpG_Me_PE_controller.sh  hg38`
+
+Once your alignments are complete, you can generate the overall QC/QA report with the following command:
+
+`sbatch /share/lasallelab/programs/CpG_Me/Paired-end/CpG_Me_PE_QC.sh` 
 
 ## Installation
 
@@ -50,7 +61,7 @@ I recommend using [Bioconda](https://bioconda.github.io) to install and manage t
 
 `conda install -c bioconda trim-galore bismark bowtie2 samtools fastq-screen multiqc`
 
-Bisulfite converted genomes will also have be created and placed in an external folder for the genome of interest as well as the genomes you would like to use to screen for contamination. This can be accomplished by using `bismark_genome_preparation`, which is detailed in the [Bismark docs](https://github.com/FelixKrueger/Bismark/tree/master/Docs), and example scripts are available in the [Genome_preperation folder](Genome-preperation) of this repository. These scripts expect that each bisulfite converted genome is located in a `genomes` folder, which contains a folder for each genome within it (i.e. `hg38`). However, you can also download the prepared indices for a number of genomes via FastQ Screen with the command `fastq_screen --bisulfite --get_genomes`
+Bisulfite converted genomes will also have be created and placed in an external folder for the genome of interest as well as the genomes you would like to use to screen for contamination. This can be accomplished by using `bismark_genome_preparation`, which is detailed in the [Bismark docs](https://github.com/FelixKrueger/Bismark/tree/master/Docs), and example scripts are available in the [Genome_preperation folder](Genome-preperation) of this repository. These scripts expect that each bisulfite converted genome is located in a `genomes` folder, which contains a folder for each genome within it (i.e. `hg38`). However, you can also download the prepared indices for a number of genomes via FastQ Screen with the command `fastq_screen --bisulfite --get_genomes`.
 
 The genome folder structure should appear as:
 
@@ -92,19 +103,19 @@ The overall folder structure should appear as:
 
 ```
 
-Finally, if you are interested in using the output with [WGBS_tools](https://github.com/kwdunaway/WGBS_Tools/tree/perl_code) or [DMRfinder](https://github.com/cemordaunt/DMRfinder), the `Bismark_to_Permeth_DSS.py` script functions as a [file converter](https://github.com/hyeyeon-hwang/bismark-file-converter). If you do not wish to use this file converter, then the final calls in both the switch and controller scripts should be deleted. 
+Finally, if you are interested in using the output with [WGBS_tools](https://github.com/kwdunaway/WGBS_Tools/tree/perl_code) or [DMRfinder](https://github.com/cemordaunt/DMRfinder), the `Bismark_to_Permeth_DSS.py` script functions as a [file converter](https://github.com/hyeyeon-hwang/bismark-file-converter). If you do not wish to use this file converter, then the final calls in both the switch and controller scripts should be deleted and you should also remove the `jid6=$` and `| cut -d " " -f 4)` part of the QC/QA call in the controller script. 
 
 ## Chastity Filtering
 
-This workflow assumes your data is Illumina quality/chastity filtered, which most service providers these days will do by default, so this step is a vestige for older HiSeq data.
+This workflow assumes your data is Illumina quality/chastity filtered, which most service providers these days will do by default, so this step is a vestige for older HiSeq data, and is something you probably don't need to worry about for new datasets.
 
 You can check by using the following command, where file.fastq.gz represents your file:
 
-`zcat JLBL001.fastq.gz | head -n 50`
+`zcat BL001.fastq.gz | head -n 50`
 
-If they aren’t you can accomplish this on command line via, where you change JLBL001 to your sample name
+Essentially, you want to make sure all your reads contain `:N:` and none contain `:Y:`. If your reads aren’t chastity filtered you can accomplish this on command line via the command below, where you change BL001 to your sample name (see ref[https://github.com/stephenturner/oneliners#find-xargs-and-gnu-parallel]):
 
-`zcat JLBL001*fastq.gz | zgrep -A 3 '^@.* [^:]*:N:[^:]*:' | zgrep -v "^--$" | gzip > JLBL001_filtered.fq.gz`
+`zcat BL001*fastq.gz | zgrep -A 3 '^@.* [^:]*:N:[^:]*:' | zgrep -v "^--$" | gzip > BL001_filtered.fq.gz`
 
 ## Merging Lanes
 

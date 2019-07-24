@@ -14,11 +14,11 @@ report_header_info:
     - Workflow Developer: 'Ben Laufer'
     - E-mail: 'blaufer@ucdavis.edu'
     - Application Type: 'WGBS'
-    - Project Type: 'cffDNA MIND Pilot'
+    - Project Type: 'Pilot'
     - Sequencing Platform: 'NovaSeq'
     - Sequencing Setup: 'PE 150 DI'
     - Library Kit: 'Accel-NGS Methyl-Seq (Swift)'
-    - Genome: 'rheMac8'
+    - Genome: 'hg38'
 
 #extra_fn_clean_exts:
 #    - type: regex_keep
