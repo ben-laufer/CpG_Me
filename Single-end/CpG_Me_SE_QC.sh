@@ -78,12 +78,12 @@ fi
 
 # Copy cytosine reports to central directory
 mkdir cytosine_reports
-"$(find `.` -name '*cov.gz.CpG_report.txt.gz' -print0 | xargs -0 cp -t cytosine_reports)"
+find . -name '*cov.gz.CpG_report.txt.gz' -type f -not -path "./cytosine_reports" -print0 | xargs -0 cp -t "./cytosine_reports" 
 
 # Copy merged cytosine reports to central directory
 mkdir cytosine_reports_merged
-"$(find `.` -name '*merged_CpG_evidence.cov.gz' -print0 | xargs -0 cp -t cytosine_reports_merged)"
- 
+find . -name '*merged_CpG_evidence.cov.gz' -type f -not -path "./cytosine_reports_merged" -print0 | xargs -0 cp -t "./cytosine_reports_merged" 
+
 ###################
 # Run Information #
 ###################
@@ -91,3 +91,8 @@ mkdir cytosine_reports_merged
 end=`date +%s`
 runtime=$((end-start))
 echo $runtime
+
+# Tidy slurm logs
+mkdir slurm_logs
+mv {*.out,*.err} ./slurm_logs
+
