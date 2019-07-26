@@ -1,12 +1,12 @@
 #!/bin/bash
 #
 #SBATCH --job-name=CpG_Me_PE
-#SBATCH --ntasks=1 # Number of cores/threads
-#SBATCH --mem-per-cpu=2000 # Ram in Mb
+#SBATCH --ntasks=2 # Number of cores/threads
+#SBATCH --mem-per-cpu=4000 # Ram in Mb
 #SBATCH --partition=production  
 #SBATCH --output=CpG_Me_PE_QC_%A.out # File to which STDOUT will be written
 #SBATCH --error=CpG_Me_PE_QC_%A.err # File to which STDERR will be written
-#SBATCH --time=0-06:00:00
+#SBATCH --time=0-8:00:00
 
 ##########################################################################################
 # Author: Ben Laufer
