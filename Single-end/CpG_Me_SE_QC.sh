@@ -1,12 +1,12 @@
 #!/bin/bash
 #
 #SBATCH --job-name=CpG_Me_SE
-#SBATCH --ntasks=1 # Number of cores/threads
-#SBATCH --mem-per-cpu=2000 # Ram in Mb
+#SBATCH --ntasks=2 # Number of cores/threads
+#SBATCH --mem-per-cpu=4000 # Ram in Mb
 #SBATCH --partition=production    
 #SBATCH --output=CpG_Me_SE_QC_%A.out # File to which STDOUT will be written
 #SBATCH --error=CpG_Me_SE_QC_%A.err # File to which STDERR will be written
-#SBATCH --time=0-06:00:00
+#SBATCH --time=0-08:00:00
 
 ##########################################################################################
 # Author: Ben Laufer
@@ -52,7 +52,9 @@ module load multiqc/1.7
 
 call="multiqc
 . \
- --config ${mainPath}/programs/CpG_Me/Single-end/multiqc_config_SE.yaml"
+--ignore slurm_logs/ \
+--ignore raw_sequences/ \
+--config ${mainPath}/programs/CpG_Me/Single-end/multiqc_config_SE.yaml"
 
 echo $call
 eval $call

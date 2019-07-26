@@ -52,6 +52,8 @@ module load multiqc/1.7
 
 call="multiqc
 . \
+--ignore slurm_logs/ \
+--ignore raw_sequences/ \
  --config ${mainPath}/programs/CpG_Me/Paired-end/multiqc_config_PE.yaml"
 
 echo $call
