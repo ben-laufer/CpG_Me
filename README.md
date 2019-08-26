@@ -61,7 +61,7 @@ I recommend using [Bioconda](https://bioconda.github.io) to install and manage t
 
 `conda install -c bioconda trim-galore bismark bowtie2 samtools fastq-screen multiqc`
 
-Bisulfite converted genomes will also have be created and placed in an external folder for the genome of interest as well as the genomes you would like to use to screen for contamination. This can be accomplished by using `bismark_genome_preparation`, which is detailed in the [Bismark docs](https://github.com/FelixKrueger/Bismark/tree/master/Docs), and example scripts are available in the [Genome_preperation folder](Genome-preperation) of this repository. These scripts expect that each bisulfite converted genome is located in a `genomes` folder, which contains a folder for each genome within it (i.e. `hg38`). However, you can also download the prepared indices for a number of genomes via FastQ Screen with the command `fastq_screen --bisulfite --get_genomes`.
+Bisulfite converted genomes will also have be created and placed in an external folder for the genome of interest as well as the genomes you would like to use to screen for contamination. This can be accomplished by using `bismark_genome_preperation`, which is detailed in the [Bismark docs](https://github.com/FelixKrueger/Bismark/tree/master/Docs), and example scripts are available in the [Genome_preperation folder](Genome-preperation) of this repository. These scripts expect that each bisulfite converted genome is located in a `genomes` folder, which contains a folder for each genome within it (i.e. `hg38`). However, you can also download the prepared indices for a number of genomes via FastQ Screen with the command `fastq_screen --bisulfite --get_genomes`.
 
 The genome folder structure should appear as:
 
@@ -107,7 +107,7 @@ Finally, if you are interested in using the output with [WGBS_tools](https://git
 
 ## Chastity Filtering
 
-This workflow assumes your data is Illumina quality/chastity filtered, which most service providers these days will do by default, so this step is a vestige for older HiSeq data, and is something you probably don't need to worry about for new datasets.
+This workflow assumes your data is Illumina quality/chastity filtered, which service providers these days will do by default, so this step is a vestige for older HiSeq data, and is something you probably don't need to worry about for new datasets.
 
 You can check by using the following command, where file.fastq.gz represents your file:
 
@@ -123,7 +123,7 @@ For large-scale studies, there are often more samples than can fit on a single l
 
 Once you have your sequencing results, the most straightforward approach to merging the results of multiple lanes of data for the same sample is as follows (see [ref](https://www.biostars.org/p/317385/)):
 
-1. Check to for right number of unique sample IDs for both R1 and R2
+1. Check for the right number of unique sample IDs for both R1 and R2
 
 ``ls -1 *R1*.gz | awk -F '_' '{print $1}' | sort | uniq | wc -l``
 
@@ -135,9 +135,9 @@ Once you have your sequencing results, the most straightforward approach to merg
 
 3. Test merge commands for each read (look over each one carefully)
 
-``for i in `cat ./task_samples.txt`; do echo cat $i\_*_R1_001.fastq.gz \> $i\_merged_R1.fastq.gz; done``
+``for i in `cat ./task_samples.txt`; do echo cat $i\_*_R1_001.fastq.gz \> $i\_1.fq.gz; done``
 
-``for i in `cat ./task_samples.txt`; do echo cat $i\_*_R2_001.fastq.gz \> $i\_merged_R2.fastq.gz; done``
+``for i in `cat ./task_samples.txt`; do echo cat $i\_*_R2_001.fastq.gz \> $i\_2.fq.gz; done``
 
 4. Use merge commands for each read by removing echo and the escape character on >
 
@@ -145,7 +145,7 @@ Once you have your sequencing results, the most straightforward approach to merg
 
 ``for i in `cat ./task_samples.txt`; do cat $i\_*_R2_001.fastq.gz > $i\_2.fq.gz; done``
 
-Now, not only are your samples merged across lanes, but you now also have your `task_samples.txt` file for the next steps.
+Now, not only are your samples merged across lanes, but you now also have your `task_samples.txt` file for the next steps. If your data is single end then you need to modify accordingly, where you will also need to slightly modify the `task_samples.txt` file after too.
 
 ## Correcting for Methylation Bias (m-bias)
 [Methylation bias (m-bias)](https://github.com/FelixKrueger/Bismark/tree/master/Docs#m-bias-plot) is a technical artifact where the 5' and 3' ends of reads contain artificial methylation levels due to the library preparation method (see Figure 2 in [Hansen *et al.*](https://www.ncbi.nlm.nih.gov/pubmed/23034175)). One example is the random priming used in post-bisulfite adapter tagging (PBAT) methods (read more [here](https://sequencing.qcfail.com/articles/mispriming-in-pbat-libraries-causes-methylation-bias-and-poor-mapping-efficiencies/)). In paired-end sequencing approaches, the m-bias can also differ between reads 1 and 2 (read more [here](https://sequencing.qcfail.com/articles/library-end-repair-reaction-introduces-methylation-biases-in-paired-end-pe-bisulfite-seq-applications/)). Therefore, it is important to always examine for this bias in the MultiQC reports. CpG m-bias can be used to guide trimming options, while CpH m-bias can be used to judge for incomplete bisulfite conversion. In our experience, we have come across the following parameters, although we recommend to examine every dataset, particularly when trying a new library preparation method or sequencing platform. In paired end approaches, the 5' end of read 2 tends to show the largest m-bias. 
