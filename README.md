@@ -113,7 +113,7 @@ You can check by using the following command, where file.fastq.gz represents you
 
 `zcat BL001.fastq.gz | head -n 50`
 
-Essentially, you want to make sure all your reads contain `:N:` and none contain `:Y:`. If your reads aren’t chastity filtered you can accomplish this on command line via the command below, where you change BL001 to your sample name (see ref[https://github.com/stephenturner/oneliners#find-xargs-and-gnu-parallel]):
+Essentially, you want to make sure all your reads contain `:N:` and none contain `:Y:`. If your reads aren’t chastity filtered you can accomplish this on command line via the command below, where you change BL001 to your sample name (see [ref](https://github.com/stephenturner/oneliners#find-xargs-and-gnu-parallel)):
 
 `zcat BL001*fastq.gz | zgrep -A 3 '^@.* [^:]*:N:[^:]*:' | zgrep -v "^--$" | gzip > BL001_filtered.fq.gz`
 
