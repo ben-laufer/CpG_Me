@@ -17,9 +17,9 @@ CpG_Me is a WGBS pipeline that takes you from raw fastq files to CpG methylation
 6. [Paired End (PE) Sequencing](https://github.com/ben-laufer/CpG_Me#paired-end-pe-sequencing)
 7. [Single End (SE) Sequencing](https://github.com/ben-laufer/CpG_Me#single-end-se-sequencing)
 8. [QC Report](https://github.com/ben-laufer/CpG_Me#qc-report)
-
 9. [Citation](https://github.com/ben-laufer/CpG_Me#citation)
-10. [Acknowledgements](https://github.com/ben-laufer/CpG_Me#acknowledgements)
+10. [Publications](https://github.com/ben-laufer/CpG_Me#publications)
+11. [Acknowledgements](https://github.com/ben-laufer/CpG_Me#acknowledgements)
 
 ## Overview
 
@@ -243,6 +243,15 @@ Laufer BI, Hwang H, Vogel Ciernia A, Mordaunt CE, LaSalle JM. Whole genome bisul
 
 Krueger F, Andrews SR. Bismark: a flexible aligner and methylation caller for Bisulfite-Seq applications. *Bioinformatics*, 2011. **doi**: [10.1093/bioinformatics/btr167](https://doi.org/10.1093/bioinformatics/btr167)
 
+## Publications
+
+The following publications utilize **CpG_Me**:
+
+Lopez SJ, Laufer BI, Beitnere U, Berg E, Silverman JL, Segal DJ, LaSalle JM. Imprinting effects of UBE3A loss on synaptic gene networks and Wnt signaling pathways. In press with *Human Molecular Genetics*, 2019.
+
+Vogel Ciernia A*, Laufer BI*, Hwang H, Dunaway KW, Mordaunt CE, Coulson RL, Yasui DH, LaSalle JM. Epigenomic convergence of genetic and immune risk factors in autism brain. *Cerebral Cortex*, 2019. **doi**: [10.1093/cercor/bhz115](https://doi.org/10.1093/cercor/bhz115)
+
+Laufer BI, Hwang H, Vogel Ciernia A, Mordaunt CE, LaSalle JM. Whole genome bisulfite sequencing of Down syndrome brain reveals regional DNA hypermethylation and novel disease insights. *Epigenetics*, 2019. **doi**: [10.1080/15592294.2019.1609867](https://doi.org/10.1080/15592294.2019.1609867)
 
 ## Acknowledgements
 The author would like to thank [Matt Settles](https://github.com/msettles) from the [UC Davis Bioinformatics Core](https://github.com/ucdavis-bioinformatics) for [examples of tidy code](https://github.com/ucdavis-bioinformatics-training/A-Primer-on-Using-the-Bioinformatics-Core-Administrated-Servers-and-Cluster-s-/tree/master/examples) and his suggestion of using a case statement to optimize the resource use of the different parts of this workflow on a high-performance computing cluster. Finally, I would like to thank [Ian Korf](https://github.com/KorfLab) for invaluable discussions related to the bioinformatic approaches utilized in this repository. 
