@@ -87,7 +87,7 @@ jid4=$(sbatch \
 --dependency=afterok:$jid3 \
 --ntasks=2 \
 --mem-per-cpu=2100 \
---time=0-07:00:00 \
+--time=0-04:00:00 \
 ${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
 insert \
 | cut -d " " -f 4) 
