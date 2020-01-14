@@ -80,11 +80,24 @@ ${genome} \
 | cut -d " " -f 4) 
 
 #######################
-# Nucleotide Coverage #
+# Insert Size Metrics #
 #######################
 
 jid4=$(sbatch \
 --dependency=afterok:$jid3 \
+--ntasks=2 \
+--mem-per-cpu=2100 \
+--time=0-07:00:00 \
+${mainPath}/programs/CpG_Me/Single-end/CpG_Me_SE_switch.sh \
+insert \
+| cut -d " " -f 4) 
+
+#######################
+# Nucleotide Coverage #
+#######################
+
+jid5=$(sbatch \
+--dependency=afterok:$jid4 \
 --ntasks=1 \
 --mem-per-cpu=4000 \
 --time=2-00:00:00 \
@@ -98,8 +111,8 @@ ${genome} \
 #######################
 
 # Each multicore needs 3 cores, 2GB overhead on buffer --split_by_chromosome \
-jid5=$(sbatch \
---dependency=afterok:$jid4 \
+jid6=$(sbatch \
+--dependency=afterok:$jid5 \
 --ntasks=18 \
 --mem-per-cpu=2000 \
 --time=2-00:00:00 \
@@ -114,8 +127,8 @@ ${genome} \
 
 # Generate merged CpG methylation for bsseq DMRfinder 
 # Merge CpGs is an experimental feature
-jid6=$(sbatch \
---dependency=afterok:$jid5 \
+jid7=$(sbatch \
+--dependency=afterok:$jid6 \
 --ntasks=3 \
 --mem-per-cpu=2000 \
 --time=2-00:00:00 \
@@ -129,7 +142,7 @@ ${genome} \
 ###########################################
 
 sbatch \
---dependency=afterok:$jid6 \
+--dependency=afterok:$jid7 \
 --ntasks=1 \
 --mem-per-cpu=25000 \
 --time=0-00:20:00 \
