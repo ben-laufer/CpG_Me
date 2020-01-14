@@ -29,11 +29,11 @@ A single command line call performs the following steps for all samples:
 2. Screen for contaminating genomes
 3. Align
 4. Remove PCR duplicates
-5. Calculate nucleotide frequencies (coverage)
-6. Extract CpG methylation
-7. Merge symmetric CpG sites
-8. Individual sample quality control and analysis (QC/QA)
-9. Legacy file (DSS/DMRfinder) conversion
+5. Calculate insert size metrics for paired-end sequencing
+6. Calculate nucleotide frequencies (coverage)
+7. Extract CpG methylation
+8. Merge symmetric CpG sites
+9. Individual sample quality control and analysis (QC/QA)
 
 A final command line call generates html QC/QA reports for all samples that easily enables the identification of failed samples and specifically what went wrong.
 
@@ -55,7 +55,8 @@ This workflow utilizes the following packages, which need to be installed and in
 3. [Bowtie 2](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml)
 4. [FastQ Screen](https://www.bioinformatics.babraham.ac.uk/projects/fastq_screen/)
 5. [Samtools](http://www.htslib.org)
-6. [MultiQC](http://multiqc.info)
+6. [Picard Tools](https://broadinstitute.github.io/picard/)
+7. [MultiQC](http://multiqc.info)
 
 I recommend using [Bioconda](https://bioconda.github.io) to install and manage the package updates, which can be accomplished by:
 
