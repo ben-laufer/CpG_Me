@@ -232,24 +232,8 @@ case $module in
           echo $call
           eval $call
           ;;
-     format)
-          ###########################################
-          # DSS/DMRfinder and WGBS_tools Conversion #
-          ###########################################
-
-          cd ${mappath}
-
-          pythonscript="python \
-          ${mainPath}/programs/CpG_Me/Bismark_to_Permeth_DSS.py \
-          ${CpGmerge} \
-          ${genome} \
-          1"
-
-          echo $pythonscript
-          eval $pythonscript
-          ;;
      *)
-          echo "Error: Pipeline case selection invalid or not specified. Please select either trim, align, deduplicate, coverage, extract, mergeCpGs, or format"
+          echo "Error: Pipeline case selection invalid or not specified. Please select either trim, align, deduplicate, coverage, extract, or mergeCpGs"
           ;;
 esac
 

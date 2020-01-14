@@ -127,27 +127,13 @@ ${genome} \
 
 # Generate merged CpG methylation for bsseq DMRfinder 
 # Merge CpGs is an experimental feature
-jid7=$(sbatch \
+sbatch \
 --dependency=afterok:$jid6 \
 --ntasks=3 \
 --mem-per-cpu=2000 \
 --time=2-00:00:00 \
 ${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
 mergeCpGs \
-${genome} \
-| cut -d " " -f 4)
-
-###########################################
-# DSS/DMRfinder and WGBS_tools Conversion #
-###########################################
-
-sbatch \
---dependency=afterok:$jid7 \
---ntasks=1 \
---mem-per-cpu=25000 \
---time=0-00:20:00 \
-${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
-format \
 ${genome}
 
 ###################

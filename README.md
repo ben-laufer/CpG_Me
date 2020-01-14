@@ -103,8 +103,6 @@ The overall folder structure should appear as:
 
 ```
 
-Finally, if you are interested in using the output with [WGBS_tools](https://github.com/kwdunaway/WGBS_Tools/tree/perl_code) or [DMRfinder](https://github.com/cemordaunt/DMRfinder), the `Bismark_to_Permeth_DSS.py` script functions as a [file converter](https://github.com/hyeyeon-hwang/bismark-file-converter). If you do not wish to use this file converter, then the final calls in both the switch and controller scripts should be deleted and you should also remove the `jid6=$` and `| cut -d " " -f 4)` part of the QC/QA call in the controller script. 
-
 ## Chastity Filtering
 
 This workflow assumes your data is Illumina quality/chastity filtered, which service providers these days will do by default, so this step is a vestige for older HiSeq data, and is something you probably don't need to worry about for new datasets.
