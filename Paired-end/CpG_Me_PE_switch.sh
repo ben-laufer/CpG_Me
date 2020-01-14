@@ -161,9 +161,9 @@ case $module in
           eval $call
           ;;
      insert)
-     	  ##################
-     	  # Insert Metrics #
-     	  ##################
+     	  #######################
+     	  # Insert Size Metrics #
+     	  #######################
      	  
      	  cd ${mappath}
      	  

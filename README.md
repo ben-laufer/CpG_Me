@@ -59,7 +59,7 @@ This workflow utilizes the following packages, which need to be installed and in
 
 I recommend using [Bioconda](https://bioconda.github.io) to install and manage the package updates, which can be accomplished by:
 
-`conda install -c bioconda trim-galore bismark bowtie2 samtools fastq-screen multiqc`
+`conda install -c bioconda trim-galore bismark bowtie2 samtools fastq-screen picard multiqc`
 
 Bisulfite converted genomes will also have to be created and placed in an external folder for the genome of interest as well as the genomes you would like to use to screen for contamination. This can be accomplished by using `bismark_genome_preperation`, which is detailed in the [Bismark docs](https://github.com/FelixKrueger/Bismark/tree/master/Docs), and example scripts are available in the [Genome_preperation folder](Genome-preperation) of this repository. These scripts expect that each bisulfite converted genome is located in a `genomes` folder, which contains a folder for each genome within it (i.e. `hg38`). However, you can also download the prepared indices for a number of genomes via FastQ Screen with the command `fastq_screen --bisulfite --get_genomes`.
 
