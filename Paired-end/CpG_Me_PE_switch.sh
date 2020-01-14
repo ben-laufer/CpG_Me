@@ -49,6 +49,7 @@ module load bowtie2/2.3.4.1
 module load samtools/1.9
 PATH="$PATH:${mainPath}/programs/CpG_Me/fastq_screen_v0.14.0/"
 export PYTHON_EGG_CACHE="${mainPath}/programs/CpG_Me"
+module load picard-tools/2.18.4
 
 ######################
 # Set Up Environment #
@@ -65,6 +66,8 @@ trim1=${sample}_1_val_1.fq.gz
 trim2=${sample}_2_val_2.fq.gz
 BAM=${sample}_1_val_1_bismark_bt2_pe.bam
 dedupBAM=${sample}_1_val_1_bismark_bt2_pe.deduplicated.bam
+insert=${sample}_1_val_1_bismark_bt2_pe.deduplicated.bam.insert.txt
+histogram=${sample}_1_val_1_bismark_bt2_pe.deduplicated.bam.histogram.pdf
 cov=${sample}_1_val_1_bismark_bt2_pe.deduplicated.bismark.cov.gz
 CpH=Non_CpG_context_${sample}_1_val_1_bismark_bt2_pe.deduplicated.txt.gz
 CpGmerge=${sample}_1_val_1_bismark_bt2_pe.deduplicated.bismark.cov.gz.CpG_report.merged_CpG_evidence.cov.gz
@@ -157,6 +160,26 @@ case $module in
           echo $call
           eval $call
           ;;
+     insert)
+     	  ##################
+     	  # Insert Metrics #
+     	  ##################
+     	  
+     	  cd ${mappath}
+     	  
+     	  call="picard SortSam \
+		  INPUT=${dedupBAM} \
+		  OUTPUT=/dev/stdout \
+		  SORT_ORDER=coordinate | \
+		  picard CollectInsertSizeMetrics \
+		  INPUT=/dev/stdin \
+		  OUTPUT=${insert} \
+		  HISTOGRAM_FILE=${histogram} \
+		  ASSUME_SORTED=FALSE"
+
+		  echo $call
+		  eval $call
+     	  ;;
      coverage)
           #######################
           # Nucleotide Coverage #
@@ -259,7 +282,7 @@ case $module in
           eval $pythonscript
           ;;
      *)
-          echo "Error: Pipeline case selection invalid or not specified. Please select either trim, align, deduplicate, coverage, extract, mergeCpGs, or format"
+          echo "Error: Pipeline case selection invalid or not specified. Please select either trim, align, deduplicate, insert, coverage, extract, mergeCpGs, or format"
           ;;
 esac
 
