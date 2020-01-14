@@ -97,7 +97,7 @@ insert \
 #######################
 
 jid5=$(sbatch \
---dependency=afterok:$jid4 \
+--dependency=afterok:$jid3 \
 --ntasks=1 \
 --mem-per-cpu=4000 \
 --time=2-00:00:00 \
@@ -112,7 +112,7 @@ ${genome} \
 
 # Each multicore needs 3 cores, 2GB overhead on buffer --split_by_chromosome \
 jid6=$(sbatch \
---dependency=afterok:$jid5 \
+--dependency=afterok:$jid3 \
 --ntasks=18 \
 --mem-per-cpu=2000 \
 --time=2-00:00:00 \
