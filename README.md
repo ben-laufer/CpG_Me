@@ -95,7 +95,6 @@ The overall folder structure should appear as:
 │   │   ├── Paired-end
 │   │   ├── Single-end
 │   │   ├── fastq_screen.conf
-│   │   ├── Bismark_to_Permeth_DSS.py
 │   │   ├── README.md
 │   │   ├── LICENSE
 ├── genomes
