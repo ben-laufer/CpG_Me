@@ -40,9 +40,9 @@ hostname
 
 # M-bias correction
 jid1=$(sbatch \
---ntasks=9 \
---mem=4000 \
---time=1-00:00:00 \
+--ntasks=3 \
+--mem=3000 \
+--time=2-00:00:00 \
 ${mainPath}/programs/CpG_Me/Single-end/CpG_Me_SE_switch.sh \
 trim \
 ${genome} \
