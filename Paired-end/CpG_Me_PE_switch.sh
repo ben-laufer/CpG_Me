@@ -84,10 +84,11 @@ case $module in
           
           mkdir ${mappath}
 
+ 		  # Use 2color for NovaSeq and NextSeq, replace with quality for HiSeq and MiSeq
           # M-bias correction Swift's Accel NGS 
-          # Use 2color for NovaSeq and NextSeq, replace with quality for HiSeq and MiSeq
           call="trim_galore \
           --paired \
+          --cores 4 \
           --2colour 20 \
           --fastqc \
           --clip_r1 10 \

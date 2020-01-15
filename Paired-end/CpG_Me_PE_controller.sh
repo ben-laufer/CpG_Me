@@ -40,9 +40,9 @@ hostname
 
 # M-bias correction
 jid1=$(sbatch \
---ntasks=3 \
---mem-per-cpu=1000 \
---time=2-00:00:00 \
+--ntasks=15 \
+--mem=4000 \
+--time=1-00:00:00 \
 ${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
 trim \
 ${genome} \
@@ -58,8 +58,8 @@ ${genome} \
 jid2=$(sbatch \
 --dependency=afterok:$jid1 \
 --ntasks=18 \
---mem-per-cpu=5000 \
---time=5-00:00:00 \
+--mem=32000 \
+--time=3-00:00:00 \
 ${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
 align \
 ${genome} \
@@ -72,7 +72,7 @@ ${genome} \
 jid3=$(sbatch \
 --dependency=afterok:$jid2 \
 --ntasks=1 \
---mem-per-cpu=30000 \
+--mem=30000 \
 --time=2-00:00:00 \
 ${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
 deduplicate \
@@ -86,7 +86,7 @@ ${genome} \
 jid4=$(sbatch \
 --dependency=afterok:$jid3 \
 --ntasks=2 \
---mem-per-cpu=2100 \
+--mem=2100 \
 --time=0-04:00:00 \
 ${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
 insert \
@@ -99,7 +99,7 @@ insert \
 jid5=$(sbatch \
 --dependency=afterok:$jid3 \
 --ntasks=1 \
---mem-per-cpu=4000 \
+--mem=4000 \
 --time=2-00:00:00 \
 ${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
 coverage \
