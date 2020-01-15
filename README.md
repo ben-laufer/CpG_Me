@@ -100,7 +100,6 @@ The overall folder structure should appear as:
 ├── genomes
 │   ├── hg38
 │   ├── mm10
-
 ```
 
 ## Chastity Filtering
