@@ -86,7 +86,7 @@ ${genome} \
 jid4=$(sbatch \
 --dependency=afterok:$jid3 \
 --ntasks=2 \
---mem=2100 \
+--mem=10000 \
 --time=0-04:00:00 \
 ${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
 insert \

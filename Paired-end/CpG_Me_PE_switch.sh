@@ -66,8 +66,9 @@ trim1=${sample}_1_val_1.fq.gz
 trim2=${sample}_2_val_2.fq.gz
 BAM=${sample}_1_val_1_bismark_bt2_pe.bam
 dedupBAM=${sample}_1_val_1_bismark_bt2_pe.deduplicated.bam
-insert=${sample}_1_val_1_bismark_bt2_pe.deduplicated.bam.insert.txt
-histogram=${sample}_1_val_1_bismark_bt2_pe.deduplicated.bam.histogram.pdf
+sortedBAM=${sample}_1_val_1_bismark_bt2_pe.deduplicated.sorted.bam
+insert=${sample}_1_val_1_bismark_bt2_pe.deduplicated.sorted.bam.insert.txt
+histogram=${sample}_1_val_1_bismark_bt2_pe.deduplicated.sorted.bam.histogram.pdf
 cov=${sample}_1_val_1_bismark_bt2_pe.deduplicated.bismark.cov.gz
 CpH=Non_CpG_context_${sample}_1_val_1_bismark_bt2_pe.deduplicated.txt.gz
 CpGmerge=${sample}_1_val_1_bismark_bt2_pe.deduplicated.bismark.cov.gz.CpG_report.merged_CpG_evidence.cov.gz
@@ -168,18 +169,25 @@ case $module in
      	  
      	  cd ${mappath}
      	  
+     	  # Can't pipe because of multiQC thinking all are named stdin
      	  call="picard SortSam \
 		  INPUT=${dedupBAM} \
-		  OUTPUT=/dev/stdout \
-		  SORT_ORDER=coordinate | \
-		  picard CollectInsertSizeMetrics \
-		  INPUT=/dev/stdin \
+		  OUTPUT=${sortedBAM} \
+		  SORT_ORDER=coordinate"
+		  
+		  echo $call
+		  eval $call
+		  
+		  call="picard CollectInsertSizeMetrics \
+		  INPUT=${sortedBAM} \
 		  OUTPUT=${insert} \
 		  HISTOGRAM_FILE=${histogram} \
 		  ASSUME_SORTED=FALSE"
 
 		  echo $call
 		  eval $call
+		  
+		  rm ${sortedBAM}
      	  ;;
      coverage)
           #######################
