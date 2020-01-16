@@ -46,6 +46,13 @@ module load bowtie2/2.3.4.1
 module load samtools/1.9
 module load multiqc/1.7
 
+#########
+# Tidy  #
+#########
+
+mkdir slurm_logs
+mv {*.out,*.err} ./slurm_logs
+
 ###########
 # MultiQC #
 ###########
@@ -93,8 +100,3 @@ find . -name '*merged_CpG_evidence.cov.gz' -type f -not -path "./cytosine_report
 end=`date +%s`
 runtime=$((end-start))
 echo $runtime
-
-# Tidy slurm logs
-mkdir slurm_logs
-mv {*.out,*.err} ./slurm_logs
-
