@@ -43,12 +43,13 @@ echo "Allocated memory: " $MEM
 # Load Modules #
 ################
 
-module load trim_galore/0.6.0
+module load trim_galore/0.6.5
 PATH="$PATH:${mainPath}/programs/CpG_Me/Bismark-master/"
 module load bowtie2/2.3.4.1
 module load samtools/1.9
 PATH="$PATH:${mainPath}/programs/CpG_Me/fastq_screen_v0.14.0/"
 export PYTHON_EGG_CACHE="${mainPath}/programs/CpG_Me"
+module load picard-tools/2.18.4
 
 ######################
 # Set Up Environment #
@@ -65,6 +66,9 @@ trim1=${sample}_1_val_1.fq.gz
 trim2=${sample}_2_val_2.fq.gz
 BAM=${sample}_1_val_1_bismark_bt2_pe.bam
 dedupBAM=${sample}_1_val_1_bismark_bt2_pe.deduplicated.bam
+sortedBAM=${sample}_1_val_1_bismark_bt2_pe.deduplicated.sorted.bam
+insert=${sample}_1_val_1_bismark_bt2_pe.deduplicated.sorted.bam.insert.txt
+histogram=${sample}_1_val_1_bismark_bt2_pe.deduplicated.sorted.bam.histogram.pdf
 cov=${sample}_1_val_1_bismark_bt2_pe.deduplicated.bismark.cov.gz
 CpH=Non_CpG_context_${sample}_1_val_1_bismark_bt2_pe.deduplicated.txt.gz
 CpGmerge=${sample}_1_val_1_bismark_bt2_pe.deduplicated.bismark.cov.gz.CpG_report.merged_CpG_evidence.cov.gz
@@ -81,10 +85,11 @@ case $module in
           
           mkdir ${mappath}
 
+ 		  # Use 2color for NovaSeq and NextSeq, replace with quality for HiSeq and MiSeq
           # M-bias correction Swift's Accel NGS 
-          # Use 2color for NovaSeq and NextSeq, replace with quality for HiSeq and MiSeq
           call="trim_galore \
           --paired \
+          --cores 4 \
           --2colour 20 \
           --fastqc \
           --clip_r1 10 \
@@ -157,6 +162,33 @@ case $module in
           echo $call
           eval $call
           ;;
+     insert)
+     	  #######################
+     	  # Insert Size Metrics #
+     	  #######################
+     	  
+     	  cd ${mappath}
+     	  
+     	  # Can't pipe because of multiQC thinking all are named stdin
+     	  call="picard SortSam \
+		  INPUT=${dedupBAM} \
+		  OUTPUT=${sortedBAM} \
+		  SORT_ORDER=coordinate"
+		  
+		  echo $call
+		  eval $call
+		  
+		  call="picard CollectInsertSizeMetrics \
+		  INPUT=${sortedBAM} \
+		  OUTPUT=${insert} \
+		  HISTOGRAM_FILE=${histogram} \
+		  ASSUME_SORTED=FALSE"
+
+		  echo $call
+		  eval $call
+		  
+		  rm ${sortedBAM}
+     	  ;;
      coverage)
           #######################
           # Nucleotide Coverage #
@@ -242,24 +274,8 @@ case $module in
           echo $call
           eval $call
           ;;
-     format)
-          ###########################################
-          # DSS/DMRfinder and WGBS_tools Conversion #
-          ###########################################
-
-          cd ${mappath}
-
-          pythonscript="python \
-          ${mainPath}/programs/CpG_Me/Bismark_to_Permeth_DSS.py \
-          ${CpGmerge} \
-          ${genome} \
-          1"
-
-          echo $pythonscript
-          eval $pythonscript
-          ;;
      *)
-          echo "Error: Pipeline case selection invalid or not specified. Please select either trim, align, deduplicate, coverage, extract, mergeCpGs, or format"
+          echo "Error: Pipeline case selection invalid or not specified. Please select either trim, align, deduplicate, insert, coverage, extract, or mergeCpGs"
           ;;
 esac
 

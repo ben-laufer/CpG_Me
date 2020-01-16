@@ -40,9 +40,9 @@ hostname
 
 # M-bias correction
 jid1=$(sbatch \
---ntasks=3 \
---mem-per-cpu=1000 \
---time=2-00:00:00 \
+--ntasks=15 \
+--mem=12000 \
+--time=0-04:00:00 \
 ${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
 trim \
 ${genome} \
@@ -58,8 +58,8 @@ ${genome} \
 jid2=$(sbatch \
 --dependency=afterok:$jid1 \
 --ntasks=18 \
---mem-per-cpu=5000 \
---time=5-00:00:00 \
+--mem=64000 \
+--time=3-00:00:00 \
 ${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
 align \
 ${genome} \
@@ -72,7 +72,7 @@ ${genome} \
 jid3=$(sbatch \
 --dependency=afterok:$jid2 \
 --ntasks=1 \
---mem-per-cpu=30000 \
+--mem=30000 \
 --time=2-00:00:00 \
 ${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
 deduplicate \
@@ -80,13 +80,26 @@ ${genome} \
 | cut -d " " -f 4) 
 
 #######################
-# Nucleotide Coverage #
+# Insert Size Metrics #
 #######################
 
 jid4=$(sbatch \
 --dependency=afterok:$jid3 \
+--ntasks=2 \
+--mem=10000 \
+--time=0-04:00:00 \
+${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
+insert \
+| cut -d " " -f 4) 
+
+#######################
+# Nucleotide Coverage #
+#######################
+
+jid5=$(sbatch \
+--dependency=afterok:$jid3 \
 --ntasks=1 \
---mem-per-cpu=4000 \
+--mem=4000 \
 --time=2-00:00:00 \
 ${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
 coverage \
@@ -98,8 +111,8 @@ ${genome} \
 #######################
 
 # Each multicore needs 3 cores, 2GB overhead on buffer --split_by_chromosome \
-jid5=$(sbatch \
---dependency=afterok:$jid4 \
+jid6=$(sbatch \
+--dependency=afterok:$jid3 \
 --ntasks=18 \
 --mem-per-cpu=2000 \
 --time=2-00:00:00 \
@@ -114,27 +127,13 @@ ${genome} \
 
 # Generate merged CpG methylation for bsseq DMRfinder 
 # Merge CpGs is an experimental feature
-jid6=$(sbatch \
---dependency=afterok:$jid5 \
+sbatch \
+--dependency=afterok:$jid6 \
 --ntasks=3 \
 --mem-per-cpu=2000 \
 --time=2-00:00:00 \
 ${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
 mergeCpGs \
-${genome} \
-| cut -d " " -f 4)
-
-###########################################
-# DSS/DMRfinder and WGBS_tools Conversion #
-###########################################
-
-sbatch \
---dependency=afterok:$jid6 \
---ntasks=1 \
---mem-per-cpu=25000 \
---time=0-00:20:00 \
-${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
-format \
 ${genome}
 
 ###################

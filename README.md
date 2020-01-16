@@ -29,11 +29,11 @@ A single command line call performs the following steps for all samples:
 2. Screen for contaminating genomes
 3. Align
 4. Remove PCR duplicates
-5. Calculate nucleotide frequencies (coverage)
-6. Extract CpG methylation
-7. Merge symmetric CpG sites
-8. Individual sample quality control and analysis (QC/QA)
-9. Legacy file (DSS/DMRfinder) conversion
+5. Calculate insert size metrics for paired-end sequencing
+6. Calculate nucleotide frequencies (coverage)
+7. Extract CpG methylation
+8. Merge symmetric CpG sites
+9. Individual sample quality control and analysis (QC/QA)
 
 A final command line call generates html QC/QA reports for all samples that easily enables the identification of failed samples and specifically what went wrong.
 
@@ -55,11 +55,12 @@ This workflow utilizes the following packages, which need to be installed and in
 3. [Bowtie 2](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml)
 4. [FastQ Screen](https://www.bioinformatics.babraham.ac.uk/projects/fastq_screen/)
 5. [Samtools](http://www.htslib.org)
-6. [MultiQC](http://multiqc.info)
+6. [Picard Tools](https://broadinstitute.github.io/picard/)
+7. [MultiQC](http://multiqc.info)
 
 I recommend using [Bioconda](https://bioconda.github.io) to install and manage the package updates, which can be accomplished by:
 
-`conda install -c bioconda trim-galore bismark bowtie2 samtools fastq-screen multiqc`
+`conda install -c bioconda trim-galore bismark bowtie2 samtools fastq-screen picard multiqc`
 
 Bisulfite converted genomes will also have to be created and placed in an external folder for the genome of interest as well as the genomes you would like to use to screen for contamination. This can be accomplished by using `bismark_genome_preperation`, which is detailed in the [Bismark docs](https://github.com/FelixKrueger/Bismark/tree/master/Docs), and example scripts are available in the [Genome_preperation folder](Genome-preperation) of this repository. These scripts expect that each bisulfite converted genome is located in a `genomes` folder, which contains a folder for each genome within it (i.e. `hg38`). However, you can also download the prepared indices for a number of genomes via FastQ Screen with the command `fastq_screen --bisulfite --get_genomes`.
 
@@ -94,16 +95,12 @@ The overall folder structure should appear as:
 │   │   ├── Paired-end
 │   │   ├── Single-end
 │   │   ├── fastq_screen.conf
-│   │   ├── Bismark_to_Permeth_DSS.py
 │   │   ├── README.md
 │   │   ├── LICENSE
 ├── genomes
 │   ├── hg38
 │   ├── mm10
-
 ```
-
-Finally, if you are interested in using the output with [WGBS_tools](https://github.com/kwdunaway/WGBS_Tools/tree/perl_code) or [DMRfinder](https://github.com/cemordaunt/DMRfinder), the `Bismark_to_Permeth_DSS.py` script functions as a [file converter](https://github.com/hyeyeon-hwang/bismark-file-converter). If you do not wish to use this file converter, then the final calls in both the switch and controller scripts should be deleted and you should also remove the `jid6=$` and `| cut -d " " -f 4)` part of the QC/QA call in the controller script. 
 
 ## Chastity Filtering
 
