@@ -40,9 +40,9 @@ hostname
 
 # M-bias correction
 jid1=$(sbatch \
---ntasks=3 \
---mem=3000 \
---time=2-00:00:00 \
+--ntasks=9 \
+--mem=12000 \
+--time=0-04:00:00 \
 ${mainPath}/programs/CpG_Me/Single-end/CpG_Me_SE_switch.sh \
 trim \
 ${genome} \
@@ -58,7 +58,7 @@ ${genome} \
 jid2=$(sbatch \
 --dependency=afterok:$jid1 \
 --ntasks=18 \
---mem=32000 \
+--mem=64000 \
 --time=3-00:00:00 \
 ${mainPath}/programs/CpG_Me/Single-end/CpG_Me_SE_switch.sh \
 align \

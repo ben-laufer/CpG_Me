@@ -43,7 +43,7 @@ echo "Allocated memory: " $MEM
 # Load Modules #
 ################
 
-module load trim_galore/0.6.0
+module load trim_galore/0.6.5
 PATH="$PATH:${mainPath}/programs/CpG_Me/Bismark-master/"
 module load bowtie2/2.3.4.1
 module load samtools/1.9
@@ -88,6 +88,7 @@ case $module in
           # M-bias correction Swift's Accel NGS 
           call="trim_galore \
           --paired \
+          --cores 4 \
           --2colour 20 \
           --fastqc \
           --clip_r1 10 \
