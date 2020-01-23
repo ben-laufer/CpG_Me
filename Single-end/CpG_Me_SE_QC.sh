@@ -44,7 +44,7 @@ echo "Allocated memory: " $MEM
 PATH="$PATH:${mainPath}/programs/CpG_Me/Bismark-master/"
 module load bowtie2/2.3.4.1
 module load samtools/1.9
-module load multiqc/1.7
+module load multiqc/1.8
 
 #########
 # Tidy  #
