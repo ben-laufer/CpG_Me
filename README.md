@@ -1,9 +1,7 @@
 # CpG_Me
-#### A whole-genome bisulfite sequencing (WGBS) pipeline for the analysis of DNA methylation
+#### A whole genome bisulfite sequencing (WGBS) pipeline for the analysis of DNA methylation
 
 CpG_Me is a WGBS pipeline that takes you from raw fastq files to CpG methylation count matrices (Bismark cytosine reports), where it preprocesses data to remove biases and provides ample QC/QA. Scripts are available for both paired end (PE) and single end (SE) sequencing approaches. The extracted CpG methylation count matrices can be then be used for the identification of differentially methylated regions (DMRs) through the accompanying [DMRichR](https://github.com/ben-laufer/DMRichR) workflow.
-
-![Workflow](Examples/CpG_Me_Flowchart.png)
 
 ### Table of Contents
 
@@ -27,15 +25,7 @@ CpG_Me is a WGBS pipeline that takes you from raw fastq files to CpG methylation
 
 A single command line call performs the following steps for all samples:
 
-1. Trim adapters and methylation bias
-2. Screen for contaminating genomes
-3. Align
-4. Remove PCR duplicates
-5. Calculate insert size metrics for paired-end sequencing
-6. Calculate nucleotide frequencies (coverage)
-7. Extract CpG methylation
-8. Merge symmetric CpG sites
-9. Individual sample quality control and analysis (QC/QA)
+![Workflow](Examples/CpG_Me_Flowchart.png)
 
 A final command line call generates html QC/QA reports for all samples that easily enables the identification of failed samples and specifically what went wrong.
 
