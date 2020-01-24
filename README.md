@@ -3,6 +3,8 @@
 
 CpG_Me is a WGBS pipeline that takes you from raw fastq files to CpG methylation count matrices (Bismark cytosine reports), where it preprocesses data to remove biases and provides ample QC/QA. Scripts are available for both paired end (PE) and single end (SE) sequencing approaches. The extracted CpG methylation count matrices can be then be used for the identification of differentially methylated regions (DMRs) through the accompanying [DMRichR](https://github.com/ben-laufer/DMRichR) workflow.
 
+![Workflow](Examples/CpG_Me_Flowchart.png)
+
 ### Table of Contents
 
 0. [Overview](https://github.com/ben-laufer/CpG_Me#overview)
