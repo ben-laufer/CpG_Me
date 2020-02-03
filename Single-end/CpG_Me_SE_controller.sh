@@ -115,7 +115,7 @@ ${genome} \
 # Generate merged CpG methylation for bsseq DMRfinder 
 # Merge CpGs is an experimental feature
 sbatch \
---dependency=afterok:$jid5 \
+--dependency=afterok:$jid4:$jid5 \
 --ntasks=3 \
 --mem-per-cpu=2000 \
 --time=2-00:00:00 \
