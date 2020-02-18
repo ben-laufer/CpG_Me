@@ -116,7 +116,7 @@ Once you have your sequencing results, the most straightforward approach to merg
 
 ```
 R1=`ls -1 *R1*.gz | awk -F '_' '{print $1}' | sort | uniq | wc -l`
-R2=`ls -1 *R1*.gz | awk -F '_' '{print $1}' | sort | uniq | wc -l`
+R2=`ls -1 *R2*.gz | awk -F '_' '{print $1}' | sort | uniq | wc -l`
 
 if [ $R1 = $R2 ]
 then

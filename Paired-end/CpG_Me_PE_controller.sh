@@ -38,11 +38,10 @@ hostname
 # Trim #
 ########
 
-# M-bias correction
 jid1=$(sbatch \
---ntasks=15 \
---mem=12000 \
---time=0-04:00:00 \
+--ntasks=3 \
+--mem-per-cpu=1000 \
+--time=1-00:00:00 \
 ${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
 trim \
 ${genome} \
