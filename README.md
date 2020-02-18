@@ -114,25 +114,44 @@ Once you have your sequencing results, the most straightforward approach to merg
 
 1. Check for the right number of unique sample IDs for both R1 and R2
 
-``ls -1 *R1*.gz | awk -F '_' '{print $1}' | sort | uniq | wc -l``
+```
+R1=`ls -1 *R1*.gz | awk -F '_' '{print $1}' | sort | uniq | wc -l`
+R2=`ls -1 *R1*.gz | awk -F '_' '{print $1}' | sort | uniq | wc -l`
 
-``ls -1 *R2*.gz | awk -F '_' '{print $1}' | sort | uniq | wc -l``
+if [ $R1 = $R2 ]
+then
+        echo "$R1 fastq files identified for merging"
+else
+        echo "ERROR: Mismatch in number of R1 and R2 files"
+        exit 1
+fi
+```
 
 2. Create file of unique IDs based on _ delimiter and first string (use file for CpG_Me)
 
 ``ls -1 *fastq.gz | awk -F '_' '{print $1}' | sort | uniq > task_samples.txt``
 
 3. Test merge commands for each read (look over each one carefully)
-
-``for i in `cat ./task_samples.txt`; do echo cat $i\_*_R1_001.fastq.gz \> $i\_1.fq.gz; done``
-
-``for i in `cat ./task_samples.txt`; do echo cat $i\_*_R2_001.fastq.gz \> $i\_2.fq.gz; done``
+```
+mergeTest(){
+	i=$1
+	echo cat $i\_*_R1_001.fastq.gz \> $i\_1.fq.gz
+	echo cat $i\_*_R2_001.fastq.gz \> $i\_2.fq.gz
+}
+export -f mergeTest
+cat task_samples.txt | parallel mergeTest
+```
 
 4. Use merge commands for each read by removing echo and the escape character on >
-
-``for i in `cat ./task_samples.txt`; do cat $i\_*_R1_001.fastq.gz > $i\_1.fq.gz; done``
-
-``for i in `cat ./task_samples.txt`; do cat $i\_*_R2_001.fastq.gz > $i\_2.fq.gz; done``
+```
+merge(){
+	i=$1
+	cat $i\_*_R1_001.fastq.gz > $i\_1.fq.gz
+	cat $i\_*_R2_001.fastq.gz > $i\_2.fq.gz
+}
+export -f merge
+cat task_samples.txt | parallel merge
+```
 
 Now, not only are your samples merged across lanes, but you now also have your `task_samples.txt` file for the next steps. If your data is single end then you need to modify accordingly, where you will also need to slightly modify the `task_samples.txt` file after too.
 
