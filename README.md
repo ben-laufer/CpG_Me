@@ -120,7 +120,7 @@ R2=`ls -1 *R1*.gz | awk -F '_' '{print $1}' | sort | uniq | wc -l`
 
 if [ $R1 = $R2 ]
 then
-        echo "$R1 fastq files identified for merging"
+        echo "Merging fastq files for $R1 samples"
 else
         echo "ERROR: Mismatch in number of R1 and R2 files"
         exit 1
