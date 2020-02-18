@@ -89,6 +89,7 @@ case $module in
           # M-bias correction Swift's Accel NGS 
           call="trim_galore \
           --paired \
+          --cores 4 \
           --2colour 20 \
           --fastqc \
           --clip_r1 10 \

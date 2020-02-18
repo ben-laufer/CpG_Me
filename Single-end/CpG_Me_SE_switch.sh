@@ -81,6 +81,7 @@ case $module in
 
           # M-bias correction MethylC-seq library preparation method
           call="trim_galore \
+          --cores 4 \
           --quality 20 \
           --fastqc \
           --clip_r1 7 \
