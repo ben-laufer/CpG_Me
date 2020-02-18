@@ -115,9 +115,24 @@ Once you have your sequencing results, the most straightforward approach to merg
 1. Check for the right number of unique sample IDs for both R1 and R2
 
 ```
-R1=`ls -1 *R1*.gz | awk -F '_' '{print $1}' | sort | uniq | wc -l`
-R2=`ls -1 *R2*.gz | awk -F '_' '{print $1}' | sort | uniq | wc -l`
-lanes=`ls -1 *R1*.gz | awk -F '_' '{print $1}' | sort | uniq -c | awk -F ' ' '{print $1}' | sort | uniq`
+countFASTQ(){
+awk -F '_' '{print $1}' | \
+	sort | \
+	uniq | \
+	wc -l
+}
+export -f countFASTQ
+
+R1=`ls -1 *R1*.gz | countFASTQ`
+R2=`ls -1 *R2*.gz | countFASTQ`
+	
+lanes=`ls -1 *R1*.gz | \
+	awk -F '_' '{print $1}' | \
+	sort | \
+	uniq -c | \
+	awk -F ' ' '{print $1}' |\
+	sort |\
+	uniq`
 
 if [ $R1 = $R2 ]
 then
@@ -130,7 +145,13 @@ fi
 
 2. Create file of unique IDs based on _ delimiter and first string (use file for CpG_Me)
 
-``ls -1 *fastq.gz | awk -F '_' '{print $1}' | sort | uniq > task_samples.txt``
+```
+ls -1 *fastq.gz | \
+	awk -F '_' '{print $1}' | \
+	sort | \
+	uniq > \
+	task_samples.txt
+```
 
 3. Test merge commands for each read (look over each one carefully)
 ```
