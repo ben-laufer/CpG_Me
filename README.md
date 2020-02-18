@@ -117,10 +117,11 @@ Once you have your sequencing results, the most straightforward approach to merg
 ```
 R1=`ls -1 *R1*.gz | awk -F '_' '{print $1}' | sort | uniq | wc -l`
 R2=`ls -1 *R2*.gz | awk -F '_' '{print $1}' | sort | uniq | wc -l`
+lanes=`ls -1 *R1*.gz | awk -F '_' '{print $1}' | sort | uniq -c | awk -F ' ' '{print $1}' | sort | uniq`
 
 if [ $R1 = $R2 ]
 then
-        echo "Merging fastq files for $R1 samples"
+        echo "$R1 samples sequenced across $lanes lanes identified for merging"
 else
         echo "ERROR: Mismatch in number of R1 and R2 files"
         exit 1
