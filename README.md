@@ -154,24 +154,24 @@ task_samples.txt
 
 3. Test merge commands for each read (look over each one carefully)
 ```
-mergeTest(){
+mergeLanesTest(){
 	i=$1
 	echo cat ${i}\_*_R1_001.fastq.gz \> ${i}\_1.fq.gz
 	echo cat ${i}\_*_R2_001.fastq.gz \> ${i}\_2.fq.gz
 }
-export -f mergeTest
-cat task_samples.txt | parallel --will-cite mergeTest
+export -f mergeLanesTest
+cat task_samples.txt | parallel --will-cite mergeLanesTest
 ```
 
 4. Use merge commands for each read by removing echo and the escape character on >
 ```
-merge(){
+mergeLanes(){
 	i=$1
 	cat ${i}\_*_R1_001.fastq.gz > ${i}\_1.fq.gz
 	cat ${i}\_*_R2_001.fastq.gz > ${i}\_2.fq.gz
 }
-export -f merge
-cat task_samples.txt | parallel --will-cite merge
+export -f mergeLanes
+cat task_samples.txt | parallel --will-cite mergeLanes
 ```
 
 Now, not only are your samples merged across lanes, but you now also have your `task_samples.txt` file for the next steps. If your data is single end then you need to modify accordingly, where you will also need to slightly modify the `task_samples.txt` file after too.
