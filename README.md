@@ -125,20 +125,19 @@ export -f countFASTQ
 
 R1=`ls -1 *R1*.gz | countFASTQ`
 R2=`ls -1 *R2*.gz | countFASTQ`
-	
-lanes=`ls -1 *R1*.gz | \
-awk -F '_' '{print $1}' | \
-sort | \
-uniq -c | \
-awk -F ' ' '{print $1}' | \
-sort | \
-uniq`
 
-if [ $R1 = $R2 ]
+if [ ${R1} = ${R2} ]
 then
-        echo "$R1 samples sequenced across $lanes lanes identified for merging"
+        lanes=`ls -1 *R1*.gz | \
+        awk -F '_' '{print $1}' | \
+        sort | \
+        uniq -c | \
+        awk -F ' ' '{print $1}' | \
+        sort | \
+        uniq`
+        echo "${R1} samples sequenced across ${lanes} lanes identified for merging"
 else
-        echo "ERROR: Mismatch in number of R1 and R2 files"
+        echo "ERROR: There are ${R1} R1 files and ${R2} R2 files"
         exit 1
 fi
 ```
@@ -157,22 +156,22 @@ task_samples.txt
 ```
 mergeTest(){
 	i=$1
-	echo cat $i\_*_R1_001.fastq.gz \> $i\_1.fq.gz
-	echo cat $i\_*_R2_001.fastq.gz \> $i\_2.fq.gz
+	echo cat ${i}\_*_R1_001.fastq.gz \> ${i}\_1.fq.gz
+	echo cat ${i}\_*_R2_001.fastq.gz \> ${i}\_2.fq.gz
 }
 export -f mergeTest
-cat task_samples.txt | parallel mergeTest
+cat task_samples.txt | parallel --will-cite mergeTest
 ```
 
 4. Use merge commands for each read by removing echo and the escape character on >
 ```
 merge(){
 	i=$1
-	cat $i\_*_R1_001.fastq.gz > $i\_1.fq.gz
-	cat $i\_*_R2_001.fastq.gz > $i\_2.fq.gz
+	cat ${i}\_*_R1_001.fastq.gz > ${i}\_1.fq.gz
+	cat ${i}\_*_R2_001.fastq.gz > ${i}\_2.fq.gz
 }
 export -f merge
-cat task_samples.txt | parallel merge
+cat task_samples.txt | parallel --will-cite merge
 ```
 
 Now, not only are your samples merged across lanes, but you now also have your `task_samples.txt` file for the next steps. If your data is single end then you need to modify accordingly, where you will also need to slightly modify the `task_samples.txt` file after too.
