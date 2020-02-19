@@ -1,9 +1,4 @@
 #!/bin/bash
-#
-#SBATCH --partition=production  
-#SBATCH --output=CpG_Me_SE_%A.out # File to which STDOUT will be written
-#SBATCH --error=CpG_Me_SE_%A.err # File to which STDERR will be written
-#SBATCH --time=0-00:10:00
 
 ##########################################################################################
 # Author: Ben Laufer
@@ -184,22 +179,22 @@ case ${module} in
           	--buffer_size 34G \
           	${dedupBAM}"
 
-          	echo $call
-          	eval $call
+          	echo ${call}
+          	eval ${call}
           
           else
-          call="bismark_methylation_extractor \
-          --single-end \
-          --gzip \
-          --comprehensive \
-          --merge_non_CpG \
-          --bedGraph \
-          --multicore 6 \
-          --buffer_size 34G \
-          ${dedupBAM}"
+          	call="bismark_methylation_extractor \
+          	--single-end \
+          	--gzip \
+          	--comprehensive \
+          	--merge_non_CpG \
+          	--bedGraph \
+          	--multicore 6 \
+          	--buffer_size 34G \
+          	${dedupBAM}"
 
-          	echo $call
-          	eval $call	
+          	echo ${call}
+          	eval ${call}	
           fi
           
           rm ${CpH}

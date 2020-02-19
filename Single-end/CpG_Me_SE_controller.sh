@@ -39,6 +39,7 @@ hostname
 ########
 
 jid1=$(sbatch \
+--partition=production \
 --job-name=Trim \
 --ntasks=9 \
 --mem=12000 \
@@ -56,6 +57,7 @@ ${genome} \
 # Each multicore needs 3 cores and 5 GB RAM per a core for directional libraries
 
 jid2=$(sbatch \
+--partition=production \
 --job-name=Align \
 --dependency=afterok:$jid1 \
 --ntasks=18 \
@@ -71,6 +73,7 @@ ${genome} \
 #########################
 
 jid3=$(sbatch \
+--partition=production \
 --job-name=Dedup \
 --dependency=afterok:$jid2 \
 --ntasks=1 \
@@ -86,6 +89,7 @@ ${genome} \
 #######################
 
 jid4=$(sbatch \
+--partition=production \
 --job-name=Coverage \
 --dependency=afterok:$jid3 \
 --ntasks=1 \
@@ -102,6 +106,7 @@ ${genome} \
 
 # Each multicore needs 3 cores, 2GB overhead on buffer --split_by_chromosome \
 jid5=$(sbatch \
+--partition=production \
 --job-name=Extract \
 --dependency=afterok:$jid3 \
 --ntasks=18 \
@@ -119,6 +124,7 @@ ${genome} \
 # Generate merged CpG methylation for bsseq DMRfinder 
 # Merge CpGs is an experimental feature
 sbatch \
+--partition=production \
 --job-name=Merge \
 --dependency=afterok:$jid4:$jid5 \
 --ntasks=3 \

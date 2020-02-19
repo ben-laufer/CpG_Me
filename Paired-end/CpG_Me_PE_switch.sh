@@ -1,9 +1,4 @@
 #!/bin/bash
-#
-#SBATCH --partition=production   
-#SBATCH --output=CpG_Me_PE_%A.out # File to which STDOUT will be written
-#SBATCH --error=CpG_Me_PE_%A.err # File to which STDERR will be written
-#SBATCH --time=0-00:10:00
 
 ##########################################################################################
 # Author: Ben Laufer
@@ -171,21 +166,21 @@ case ${module} in
      	  
      	  # Can't pipe because of multiQC thinking all are named stdin
      	  call="picard SortSam \
-		       INPUT=${dedupBAM} \
-		       OUTPUT=${sortedBAM} \
-		       SORT_ORDER=coordinate"
+		  INPUT=${dedupBAM} \
+		  OUTPUT=${sortedBAM} \
+		  SORT_ORDER=coordinate"
 		  
-		  echo $call
-		  eval $call
+		  echo ${call}
+		  eval ${call}
 		  
 		  call="picard CollectInsertSizeMetrics \
-		       INPUT=${sortedBAM} \
-		       OUTPUT=${insert} \
-		       HISTOGRAM_FILE=${histogram} \
-		       ASSUME_SORTED=FALSE"
+		  INPUT=${sortedBAM} \
+		  OUTPUT=${insert} \
+		  HISTOGRAM_FILE=${histogram} \
+		  ASSUME_SORTED=FALSE"
 
-		  echo $call
-		  eval $call
+		  echo ${call}
+		  eval ${call}
 		  
 		  rm ${sortedBAM}
      	  ;;
@@ -225,22 +220,22 @@ case ${module} in
           	--buffer_size 34G \
           	${dedupBAM}"
 
-          	echo $call
-          	eval $call
+          	echo ${call}
+          	eval ${call}
           
           else
-          call="bismark_methylation_extractor \
-          --paired-end \
-          --gzip \
-          --comprehensive \
-          --merge_non_CpG \
-          --bedGraph \
-          --multicore 6 \
-          --buffer_size 34G \
-          ${dedupBAM}"
+          	call="bismark_methylation_extractor \
+          	--paired-end \
+          	--gzip \
+          	--comprehensive \
+          	--merge_non_CpG \
+          	--bedGraph \
+          	--multicore 6 \
+          	--buffer_size 34G \
+          	${dedupBAM}"
 
-          	echo $call
-          	eval $call	
+          	echo ${call}
+          	eval ${call}	
           fi
           
           rm ${CpH}
