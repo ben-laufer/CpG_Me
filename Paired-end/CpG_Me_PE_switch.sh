@@ -1,6 +1,5 @@
 #!/bin/bash
 #
-#SBATCH --job-name=CpG_Me_PE
 #SBATCH --partition=production   
 #SBATCH --output=CpG_Me_PE_%A.out # File to which STDOUT will be written
 #SBATCH --error=CpG_Me_PE_%A.err # File to which STDERR will be written
@@ -34,10 +33,10 @@ start=`date +%s`
 hostname
 
 THREADS=${SLURM_NTASKS}
-MEM=$(expr ${SLURM_MEM_PER_CPU} / 1024)
+MEM=$((${SLURM_MEM_PER_CPU}/1024))
 
-echo "Allocated threads: " $THREADS
-echo "Allocated memory: " $MEM
+echo "Allocated threads: ${THREADS}"
+echo "Allocated memory:  ${MEM}"
 
 ################
 # Load Modules #
@@ -77,7 +76,7 @@ CpGmerge=${sample}_1_val_1_bismark_bt2_pe.deduplicated.bismark.cov.gz.CpG_report
 # Case Switches #
 #################
 
-case $module in
+case ${module} in
      trim)      
           ########
           # Trim #
@@ -100,8 +99,8 @@ case $module in
           ${fastq1} \
           ${fastq2}" 
 
-          echo $call
-          eval $call
+          echo ${call}
+          eval ${call}
           ;;     
      align)      
           ##########
@@ -116,8 +115,8 @@ case $module in
           ${trim1} \
           ${trim2}" 
 
-          echo $call
-          eval $call
+          echo ${call}
+          eval ${call}
 
           #########
           # Align #
@@ -134,14 +133,15 @@ case $module in
           -1 ${trim1} \
           -2 ${trim2}"
 
-          echo $call
-          eval $call
-                   
+          echo ${call}
+          eval ${call}
+              
           #############################
           # Remove Intermediate Files #
           #############################
 
-          if [ -f ${BAM} ] ; then
+          if [ -f ${BAM} ]
+          then
             rm ${trim1}
           	rm ${trim2}
           fi
@@ -159,8 +159,8 @@ case $module in
           --paired \
           ${BAM}"
 
-          echo $call
-          eval $call
+          echo ${call}
+          eval ${call}
           ;;
      insert)
      	  #######################
@@ -171,18 +171,18 @@ case $module in
      	  
      	  # Can't pipe because of multiQC thinking all are named stdin
      	  call="picard SortSam \
-		  INPUT=${dedupBAM} \
-		  OUTPUT=${sortedBAM} \
-		  SORT_ORDER=coordinate"
+		       INPUT=${dedupBAM} \
+		       OUTPUT=${sortedBAM} \
+		       SORT_ORDER=coordinate"
 		  
 		  echo $call
 		  eval $call
 		  
 		  call="picard CollectInsertSizeMetrics \
-		  INPUT=${sortedBAM} \
-		  OUTPUT=${insert} \
-		  HISTOGRAM_FILE=${histogram} \
-		  ASSUME_SORTED=FALSE"
+		       INPUT=${sortedBAM} \
+		       OUTPUT=${insert} \
+		       HISTOGRAM_FILE=${histogram} \
+		       ASSUME_SORTED=FALSE"
 
 		  echo $call
 		  eval $call
@@ -200,8 +200,8 @@ case $module in
           --genome_folder ${mainPath}/genomes/${genome}/ \
           ${dedupBAM}"
 
-          echo $call
-          eval $call
+          echo ${call}
+          eval ${call}
           ;; 
      extract)
           #######################
@@ -212,7 +212,7 @@ case $module in
 
           # Each multicore needs 3 cores, 2GB overhead on buffer --split_by_chromosome \
           # Use --scaffolds for genomes with many contigs
-          if [ $genome == "rheMac8" ]
+          if [ ${genome} == "rheMac8" ]
           then
           	call="bismark_methylation_extractor \
           	--paired-end \
@@ -229,16 +229,15 @@ case $module in
           	eval $call
           
           else
-          
           call="bismark_methylation_extractor \
-          	--paired-end \
-          	--gzip \
-          	--comprehensive \
-          	--merge_non_CpG \
-          	--bedGraph \
-          	--multicore 6 \
-          	--buffer_size 34G \
-          	${dedupBAM}"
+          --paired-end \
+          --gzip \
+          --comprehensive \
+          --merge_non_CpG \
+          --bedGraph \
+          --multicore 6 \
+          --buffer_size 34G \
+          ${dedupBAM}"
 
           	echo $call
           	eval $call	
@@ -253,7 +252,7 @@ case $module in
 
           cd ${mappath}
 
-          # Generate merged CpG methylation for bsseq DMRfinder 
+          # Generate merged CpG methylation for DMRichR
           # Merge CpGs is an experimental feature
           call="coverage2cytosine \
           --output ${mappath}/${cov} \
@@ -262,8 +261,8 @@ case $module in
           --merge_CpG \
           ${mappath}/${cov}"
 
-          echo $call
-          eval $call
+          echo ${call}
+          eval ${call}
 
           #############
           # QC Report #
@@ -271,11 +270,12 @@ case $module in
 
           call="bismark2report"
 
-          echo $call
-          eval $call
+          echo ${call}
+          eval ${call}
           ;;
      *)
-          echo "Error: Pipeline case selection invalid or not specified. Please select either trim, align, deduplicate, insert, coverage, extract, or mergeCpGs"
+          echo "Error: Pipeline case selection of ${module} is invalid or not specified."
+          echo "Please select either trim, align, deduplicate, insert, coverage, extract, or mergeCpGs"
           ;;
 esac
 
@@ -285,4 +285,4 @@ esac
 
 end=`date +%s`
 runtime=$((end-start))
-echo $runtime
+echo ${runtime}

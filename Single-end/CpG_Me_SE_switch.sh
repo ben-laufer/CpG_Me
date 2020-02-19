@@ -1,6 +1,5 @@
 #!/bin/bash
 #
-#SBATCH --job-name=CpG_Me_SE
 #SBATCH --partition=production  
 #SBATCH --output=CpG_Me_SE_%A.out # File to which STDOUT will be written
 #SBATCH --error=CpG_Me_SE_%A.err # File to which STDERR will be written
@@ -34,10 +33,10 @@ start=`date +%s`
 hostname
 
 THREADS=${SLURM_NTASKS}
-MEM=$(expr ${SLURM_MEM_PER_CPU} / 1024)
+MEM=$((${SLURM_MEM_PER_CPU}/1024))
 
-echo "Allocated threads: " $THREADS
-echo "Allocated memory: " $MEM
+echo "Allocated threads: ${THREADS}"
+echo "Allocated memory:  ${MEM}"
 
 ################
 # Load Modules #
@@ -71,7 +70,7 @@ CpGmerge=${sample}_trimmed_bismark_bt2.deduplicated.bismark.cov.gz.CpG_report.me
 # Case Switches #
 #################
 
-case $module in
+case ${module} in
      trim)      
           ########
           # Trim #
@@ -89,8 +88,8 @@ case $module in
           --output_dir ${mappath} \
           ${fastq}" 
 
-          echo $call
-          eval $call
+          echo ${call}
+          eval ${call}
           ;;     
      align)      
           ##########
@@ -104,8 +103,8 @@ case $module in
           --bisulfite \
           ${trim}"
 
-          echo $call
-          eval $call
+          echo ${call}
+          eval ${call}
 
           #########
           # Align #
@@ -121,14 +120,15 @@ case $module in
           --multicore 6 \
           ${trim}"
 
-          echo $call
-          eval $call
-                   
+          echo ${call}
+          eval ${call}
+               
           #############################
           # Remove Intermediate Files #
           #############################
 
-          if [ -f ${BAM} ] ; then
+          if [ -f ${BAM} ]
+          then
             rm ${trim}
           fi
           ;;     
@@ -145,8 +145,8 @@ case $module in
           --single \
           ${BAM}"
 
-          echo $call
-          eval $call
+          echo ${call}
+          eval ${call}
           ;;
      coverage)
           #######################
@@ -159,8 +159,8 @@ case $module in
           --genome_folder ${mainPath}/genomes/${genome}/ \
           ${dedupBAM}"
 
-          echo $call
-          eval $call
+          echo ${call}
+          eval ${call}
           ;; 
      extract)
           #######################
@@ -171,7 +171,7 @@ case $module in
 
           # Each multicore needs 3 cores, 2GB overhead on buffer --split_by_chromosome \
           # Use --scaffolds for genomes with many contigs
-          if [ $genome == "rheMac8" ]
+          if [ ${genome} = "rheMac8" ]
           then
           	call="bismark_methylation_extractor \
           	--single-end \
@@ -188,16 +188,15 @@ case $module in
           	eval $call
           
           else
-          
           call="bismark_methylation_extractor \
-          	--single-end \
-          	--gzip \
-          	--comprehensive \
-          	--merge_non_CpG \
-          	--bedGraph \
-          	--multicore 6 \
-          	--buffer_size 34G \
-          	${dedupBAM}"
+          --single-end \
+          --gzip \
+          --comprehensive \
+          --merge_non_CpG \
+          --bedGraph \
+          --multicore 6 \
+          --buffer_size 34G \
+          ${dedupBAM}"
 
           	echo $call
           	eval $call	
@@ -212,7 +211,7 @@ case $module in
 
           cd ${mappath}
 
-          # Generate merged CpG methylation for bsseq DMRfinder 
+          # Generate merged CpG methylation for DMRichR 
           # Merge CpGs is an experimental feature
           call="coverage2cytosine \
           --output ${mappath}/${cov} \
@@ -221,8 +220,8 @@ case $module in
           --merge_CpG \
           ${mappath}/${cov}"
 
-          echo $call
-          eval $call
+          echo ${call}
+          eval ${call}
 
           #############
           # QC Report #
@@ -230,11 +229,12 @@ case $module in
 
           call="bismark2report"
 
-          echo $call
-          eval $call
+          echo ${call}
+          eval ${call}
           ;;
      *)
-          echo "Error: Pipeline case selection invalid or not specified. Please select either trim, align, deduplicate, coverage, extract, or mergeCpGs"
+          echo "Error: Pipeline case selection of ${module} is invalid or not specified."
+          echo "Please select either trim, align, deduplicate, coverage, extract, or mergeCpGs"
           ;;
 esac
 

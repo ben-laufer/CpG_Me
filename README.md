@@ -116,7 +116,7 @@ Once you have your sequencing results, the most straightforward approach to merg
 
 ```
 countFASTQ(){
-awk -F '_' '{print $1}' | \
+	awk -F '_' '{print $1}' | \
 	sort | \
 	uniq | \
 	wc -l
@@ -127,12 +127,12 @@ R1=`ls -1 *R1*.gz | countFASTQ`
 R2=`ls -1 *R2*.gz | countFASTQ`
 	
 lanes=`ls -1 *R1*.gz | \
-	awk -F '_' '{print $1}' | \
-	sort | \
-	uniq -c | \
-	awk -F ' ' '{print $1}' |\
-	sort |\
-	uniq`
+awk -F '_' '{print $1}' | \
+sort | \
+uniq -c | \
+awk -F ' ' '{print $1}' | \
+sort | \
+uniq`
 
 if [ $R1 = $R2 ]
 then
@@ -147,10 +147,10 @@ fi
 
 ```
 ls -1 *fastq.gz | \
-	awk -F '_' '{print $1}' | \
-	sort | \
-	uniq > \
-	task_samples.txt
+awk -F '_' '{print $1}' | \
+sort | \
+uniq > \
+task_samples.txt
 ```
 
 3. Test merge commands for each read (look over each one carefully)

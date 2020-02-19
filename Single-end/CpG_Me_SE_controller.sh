@@ -39,6 +39,7 @@ hostname
 ########
 
 jid1=$(sbatch \
+--job-name=Trim \
 --ntasks=9 \
 --mem=12000 \
 --time=0-03:00:00 \
@@ -55,6 +56,7 @@ ${genome} \
 # Each multicore needs 3 cores and 5 GB RAM per a core for directional libraries
 
 jid2=$(sbatch \
+--job-name=Align \
 --dependency=afterok:$jid1 \
 --ntasks=18 \
 --mem=64000 \
@@ -69,6 +71,7 @@ ${genome} \
 #########################
 
 jid3=$(sbatch \
+--job-name=Dedup \
 --dependency=afterok:$jid2 \
 --ntasks=1 \
 --mem=30000 \
@@ -83,6 +86,7 @@ ${genome} \
 #######################
 
 jid4=$(sbatch \
+--job-name=Coverage \
 --dependency=afterok:$jid3 \
 --ntasks=1 \
 --mem=4000 \
@@ -98,6 +102,7 @@ ${genome} \
 
 # Each multicore needs 3 cores, 2GB overhead on buffer --split_by_chromosome \
 jid5=$(sbatch \
+--job-name=Extract \
 --dependency=afterok:$jid3 \
 --ntasks=18 \
 --mem-per-cpu=2000 \
@@ -114,6 +119,7 @@ ${genome} \
 # Generate merged CpG methylation for bsseq DMRfinder 
 # Merge CpGs is an experimental feature
 sbatch \
+--job-name=Merge \
 --dependency=afterok:$jid4:$jid5 \
 --ntasks=3 \
 --mem-per-cpu=2000 \
@@ -128,6 +134,6 @@ ${genome}
 
 end=`date +%s`
 runtime=$((end-start))
-echo $runtime
+echo ${runtime}
 
 squeue -u $USER -o "%.8A %.4C %.10m %.20E"

@@ -28,14 +28,12 @@ export mainPath="/share/lasallelab"
 start=`date +%s`
 
 hostname
-echo "My SLURM_ARRAY_TASK_ID: " $SLURM_ARRAY_TASK_ID
-echo "My SLURM_ARRAY_JOB_ID: " $SLURM_ARRAY_JOB_ID
 
 THREADS=${SLURM_NTASKS}
-MEM=$(expr ${SLURM_MEM_PER_CPU} / 1024)
+MEM=$((${SLURM_MEM_PER_CPU}/1024))
 
-echo "Allocated threads: " $THREADS
-echo "Allocated memory: " $MEM
+echo "Allocated threads: ${THREADS}"
+echo "Allocated memory:  ${MEM}"
 
 ################
 # Load Modules #
@@ -57,14 +55,14 @@ mv {*.out,*.err} ./slurm_logs
 # MultiQC #
 ###########
 
-call="multiqc
+call="multiqc \
 . \
 --ignore slurm_logs/ \
 --ignore raw_sequences/ \
 --config ${mainPath}/programs/CpG_Me/Paired-end/multiqc_config_PE.yaml"
 
-echo $call
-eval $call
+echo ${call}
+eval ${call}
 
 ###########
 # Bismark #
@@ -73,25 +71,42 @@ eval $call
 call="bismark2summary \
 "$(find `.` -name '*_pe.bam' -print | tr '\n' ' ')""
 
-echo $call
-eval $call
+echo ${call}
+eval ${call}
 
 #########
 # Tidy  #
 #########
 
 # Remove non-deduplicated BAM files
-if [ -f "bismark_summary_report.html" ] ; then
+if [ -f "bismark_summary_report.html" ]
+then
     find . -type f -name "*_pe.bam" -exec rm -f {} \;
 fi
 
 # Copy cytosine reports to central directory
 mkdir cytosine_reports
-find . -name '*cov.gz.CpG_report.txt.gz' -type f -not -path "./cytosine_reports" -print0 | xargs -0 cp -t "./cytosine_reports" 
+find \
+. \
+-name '*cov.gz.CpG_report.txt.gz' \
+-type f \
+-not -path "./cytosine_reports" \
+-print0 | \
+xargs -0 \
+cp -t \
+"./cytosine_reports" 
 
 # Copy merged cytosine reports to central directory
 mkdir cytosine_reports_merged
-find . -name '*merged_CpG_evidence.cov.gz' -type f -not -path "./cytosine_reports_merged" -print0 | xargs -0 cp -t "./cytosine_reports_merged" 
+find \
+. \
+-name '*merged_CpG_evidence.cov.gz' \
+-type f \
+-not -path "./cytosine_reports_merged" \
+-print0 | \
+xargs -0 \
+cp -t \
+"./cytosine_reports_merged" 
 
 ###################
 # Run Information #
@@ -99,4 +114,4 @@ find . -name '*merged_CpG_evidence.cov.gz' -type f -not -path "./cytosine_report
 
 end=`date +%s`
 runtime=$((end-start))
-echo $runtime
+echo ${runtime}
