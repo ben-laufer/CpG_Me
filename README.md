@@ -17,9 +17,10 @@ CpG_Me is an optimized and comprehensive WGBS pipeline for a SLURM job scheduler
 6. [Paired End (PE) Sequencing](https://github.com/ben-laufer/CpG_Me#paired-end-pe-sequencing)
 7. [Single End (SE) Sequencing](https://github.com/ben-laufer/CpG_Me#single-end-se-sequencing)
 8. [QC Report](https://github.com/ben-laufer/CpG_Me#qc-report)
-9. [Citation](https://github.com/ben-laufer/CpG_Me#citation)
-10. [Publications](https://github.com/ben-laufer/CpG_Me#publications)
-11. [Acknowledgements](https://github.com/ben-laufer/CpG_Me#acknowledgements)
+9. [DMR Calling](https://github.com/ben-laufer/CpG_Me#dmr-calling)
+10. [Citation](https://github.com/ben-laufer/CpG_Me#citation)
+11. [Publications](https://github.com/ben-laufer/CpG_Me#publications)
+12. [Acknowledgements](https://github.com/ben-laufer/CpG_Me#acknowledgements)
 
 ## Overview
 
@@ -96,7 +97,7 @@ The overall folder structure should appear as:
 
 ## Chastity Filtering
 
-This workflow assumes your data is Illumina quality/chastity filtered, which service providers these days will do by default, so this step is a vestige for older HiSeq data, and is something you probably don't need to worry about for new datasets.
+This workflow assumes your data is Illumina quality/chastity filtered, which service providers these days will do by default. So, this step is a vestige for very old HiSeq data, and is something you probably don't need to worry about for new datasets.
 
 You can check by using the following command, where file.fastq.gz represents your file:
 
@@ -263,6 +264,9 @@ To generate the QC report for single end sequencing data, the command is:
 `sbatch /share/lasallelab/programs/CpG_Me/Single-end/CpG_Me_SE_QC.sh` 
 
 An [example report](Examples/multiqc_report.html) for single end sequencing is available in the `Examples` folder. There is currently a minor glitch in the paired end reports, where the temporary files for the different reads create empty columns. This can be fixed by clicking on the configure columns button above the general statistics table and re-selecting one of the visibile columns. Also, these reports can be customized by modifying the multiqc_config.yaml files for the [paired end](Paired-end/multiqc_config_PE.yaml) and [single end](Single-end/multiqc_config_SE.yaml) pipelines. 
+
+## DMR calling
+Statistical testing for differentially methylated regions (DMRs) can be achieved by [DMRichR](https://github.com/ben-laufer/DMRichR), which utilizes the `cytosine_reports` folder created by CpG_Me. 
 
 ## Citation
 

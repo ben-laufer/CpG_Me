@@ -240,15 +240,15 @@ case ${module} in
           
           rm ${CpH}
           ;;
-     mergeCpGs)
-          ##############
-          # Merge CpGs #
-          ##############
+     cytosineReport)
+          ###################
+          # Cytosine Report #
+          ###################
 
           cd ${mappath}
 
-          # Generate merged CpG methylation for DMRichR
-          # Merge CpGs is an experimental feature
+          # Generate genome-wide cytosine reports
+          # Merge CpGs is an experimental feature, so DMRichR doesn't use those
           call="coverage2cytosine \
           --output ${mappath}/${cov} \
           --genome_folder ${mainPath}/genomes/${genome}/ \
@@ -270,7 +270,7 @@ case ${module} in
           ;;
      *)
           echo "Error: Pipeline case selection of ${module} is invalid or not specified."
-          echo "Please select either trim, align, deduplicate, insert, coverage, extract, or mergeCpGs"
+          echo "Please select either trim, align, deduplicate, insert, coverage, extract, or cytosineReport"
           ;;
 esac
 

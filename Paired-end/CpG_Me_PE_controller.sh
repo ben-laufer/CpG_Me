@@ -132,21 +132,19 @@ extract \
 ${genome} \
 | cut -d " " -f 4)
 
-############################
-# Merge CpGs and QC report #
-############################
+###########################
+# Cytosine and QC reports #
+###########################
 
-# Generate merged CpG methylation for bsseq DMRfinder 
-# Merge CpGs is an experimental feature
 sbatch \
 --partition=production \
---job-name=Merge \
+--job-name=Report \
 --dependency=afterok:$jid5:$jid6 \
 --ntasks=3 \
 --mem-per-cpu=2000 \
 --time=2-00:00:00 \
 ${mainPath}/programs/CpG_Me/Paired-end/CpG_Me_PE_switch.sh \
-mergeCpGs \
+cytosineReport \
 ${genome}
 
 ###################
