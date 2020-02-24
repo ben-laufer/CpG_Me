@@ -177,7 +177,7 @@ case ${module} in
 		  INPUT=${sortedBAM} \
 		  OUTPUT=${insert} \
 		  HISTOGRAM_FILE=${histogram} \
-		  ASSUME_SORTED=FALSE"
+		  ASSUME_SORTED=TRUE"
 
 		  echo ${call}
 		  eval ${call}
