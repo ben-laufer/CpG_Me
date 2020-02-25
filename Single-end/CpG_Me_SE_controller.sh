@@ -17,9 +17,10 @@
 # Initialize #
 ##############
 
-# Manually set mainPath
+# Manually set mainPath and partition
 
 export mainPath="/share/lasallelab"
+export partition="production"
 
 # Command line arguments set genome and array variables
 # Provide a task_samples.txt file of sample ids (no file extensions) with one per a line in working directory and a raw_sequences folder with paired fastq files (.fq.gz)
@@ -39,8 +40,10 @@ hostname
 ########
 
 jid1=$(sbatch \
---partition=production \
 --job-name=Trim \
+--output=Trim_%j.out \
+--error=Trim_%j.err \
+--partition=${partition} \
 --ntasks=9 \
 --mem=12000 \
 --time=0-03:00:00 \
@@ -57,9 +60,11 @@ ${genome} \
 # Each multicore needs 3 cores and 5 GB RAM per a core for directional libraries
 
 jid2=$(sbatch \
---partition=production \
 --job-name=Align \
---dependency=afterok:$jid1 \
+--output=Align_%j.out \
+--error=Align_%j.err \
+--partition=${partition} \
+--dependency=afterok:${jid1} \
 --ntasks=18 \
 --mem=64000 \
 --time=3-00:00:00 \
@@ -73,9 +78,11 @@ ${genome} \
 #########################
 
 jid3=$(sbatch \
---partition=production \
 --job-name=Dedup \
---dependency=afterok:$jid2 \
+--output=Dedup_%j.out \
+--error=Dedup_%j.err \
+--partition=${partition} \
+--dependency=afterok:${jid2} \
 --ntasks=1 \
 --mem=30000 \
 --time=1-12:00:00 \
@@ -89,9 +96,11 @@ ${genome} \
 #######################
 
 jid4=$(sbatch \
---partition=production \
 --job-name=Coverage \
---dependency=afterok:$jid3 \
+--output=Coverage_%j.out \
+--error=Coverage_%j.err \
+--partition=${partition} \
+--dependency=afterok:${jid3} \
 --ntasks=1 \
 --mem=4000 \
 --time=2-00:00:00 \
@@ -106,9 +115,11 @@ ${genome} \
 
 # Each multicore needs 3 cores, 2GB overhead on buffer --split_by_chromosome \
 jid5=$(sbatch \
---partition=production \
 --job-name=Extract \
---dependency=afterok:$jid3 \
+--output=Extract_%j.out \
+--error=Extract_%j.err \
+--partition=${partition} \
+--dependency=afterok:${jid3} \
 --ntasks=18 \
 --mem-per-cpu=2000 \
 --time=2-00:00:00 \
@@ -122,9 +133,11 @@ ${genome} \
 ###########################
 
 sbatch \
---partition=production \
 --job-name=Report \
---dependency=afterok:$jid4:$jid5 \
+--output=Report_%j.out \
+--error=Report_%j.err \
+--partition=${partition} \
+--dependency=afterok:${jid4}:${jid5} \
 --ntasks=3 \
 --mem-per-cpu=2000 \
 --time=2-00:00:00 \
