@@ -118,8 +118,7 @@ Once you have your sequencing results, the most straightforward approach to merg
 ```
 countFASTQ(){
 	awk -F '_' '{print $1}' | \
-	sort | \
-	uniq | \
+	sort -u | \
 	wc -l
 }
 export -f countFASTQ
@@ -134,8 +133,7 @@ then
         sort | \
         uniq -c | \
         awk -F ' ' '{print $1}' | \
-        sort | \
-        uniq`
+        sort -u`
         echo "${R1} samples sequenced across ${lanes} lanes identified for merging"
 else
         echo "ERROR: There are ${R1} R1 files and ${R2} R2 files"
@@ -148,8 +146,7 @@ fi
 ```
 ls -1 *fastq.gz | \
 awk -F '_' '{print $1}' | \
-sort | \
-uniq > \
+sort -u > \
 task_samples.txt
 ```
 
@@ -161,7 +158,7 @@ mergeLanesTest(){
 	echo cat ${i}\_*_R2_001.fastq.gz \> ${i}\_2.fq.gz
 }
 export -f mergeLanesTest
-cat task_samples.txt | parallel --will-cite mergeLanesTest
+cat task_samples.txt | parallel --jobs 6 --will-cite mergeLanesTest
 ```
 
 4. Use merge commands for each read by removing echo and the escape character on >
@@ -172,7 +169,7 @@ mergeLanes(){
 	cat ${i}\_*_R2_001.fastq.gz > ${i}\_2.fq.gz
 }
 export -f mergeLanes
-cat task_samples.txt | parallel --will-cite mergeLanes
+cat task_samples.txt | parallel --jobs 6 --verbose --will-cite  mergeLanes
 ```
 
 Now, not only are your samples merged across lanes, but you now also have your `task_samples.txt` file for the next steps. If your data is single end then you need to modify accordingly, where you will also need to slightly modify the `task_samples.txt` file after too.
