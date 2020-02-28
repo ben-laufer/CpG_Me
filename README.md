@@ -207,7 +207,7 @@ To address m-bias, the following parameters should be customized in the `CpG_Me_
 
  `awk '{ sub("\r$", ""); print }' task_samples_windows.txt > task_samples.txt`
  
-3.	Within that parent directory create a folder called “raw_sequences” that contains all raw paired fastq files (.fq.gz)
+3.	Within that parent directory create a folder called “raw_sequences” that contains all raw paired fastq files (sampleID_1.fq.gz and sampleID_2.fq.gz)
 
 Overall, the directory tree structure should be the following:
 
