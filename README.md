@@ -111,7 +111,7 @@ Essentially, you want to make sure all your reads contain `:N:` and none contain
 
 For large-scale studies, there are often more samples than can fit on a single lane of sequencing. Even the NovaSeq has its limits and we generally recommend not to pool more than 48 samples per a NovaSeq lane for this low-coverage WGBS workflow. However, lane effects are a significant source of [batch effects](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3880143/) in any high-throughput sequencing experiment. In order to combat this source of technical bias, which can produce an effect stronger than biological signal, we create a large library pool (up to 96 samples with dual indices) and then repeatedly sequence that library pool across multiple lanes. A MiSeq run of this pool is also a great QC/QA step that helps with balancing the library pool before the large sequencing commitment.
 
-Once you have your sequencing results, the most straightforward approach to merging the results of multiple lanes of data for the same sample is as follows (see [ref](https://www.biostars.org/p/317385/)):
+Once you have your sequencing results, the most straightforward approach to merging the results of multiple lanes of data for the same sample is as follows (see [ref](https://www.biostars.org/p/317385/) and [FASTQ_Me](https://github.com/ben-laufer/FASTQ_Me)):
 
 1. Check for the right number of unique sample IDs for both R1 and R2
 
@@ -267,11 +267,15 @@ Statistical testing for differentially methylated regions (DMRs) can be achieved
 
 ## Citation
 
-If you use **CpG_Me** in published research please cite the 2 following articles:
+If you use **CpG_Me** in published research please cite the 4 following articles:
 
 Laufer BI, Hwang H, Vogel Ciernia A, Mordaunt CE, LaSalle JM. Whole genome bisulfite sequencing of Down syndrome brain reveals regional DNA hypermethylation and novel disease insights. *Epigenetics*, 2019. **doi**: [10.1080/15592294.2019.1609867](https://doi.org/10.1080/15592294.2019.1609867)
 
 Krueger F, Andrews SR. Bismark: a flexible aligner and methylation caller for Bisulfite-Seq applications. *Bioinformatics*, 2011. **doi**: [10.1093/bioinformatics/btr167](https://doi.org/10.1093/bioinformatics/btr167)
+
+Matrin M. Cutadapt removes adapter sequences from high-throughput sequencing reads. *EMBnet.journal*, 2011. **doi**: [10.14806/ej.17.1.200](https://doi.org/10.14806/ej.17.1.200)
+
+Ewels P, Magnusson M, Lundin S, Käller M. MultiQC: summarize analysis results for multiple tools and samples in a single report. *Bioinformatics*, 2016. **doi**: [10.1093/bioinformatics/btw354](https://doi.org/10.1093/bioinformatics/btw354)
 
 ## Publications
 
