@@ -166,7 +166,7 @@ case ${module} in
 
           # Each multicore needs 3 cores, 2GB overhead on buffer --split_by_chromosome \
           # Use --scaffolds for genomes with many contigs
-          if [ ${genome} = "rheMac8" ]
+          if [ ${genome} == "rheMac8" ] || [ ${genome} == "rheMac10" ]
           then
           	call="bismark_methylation_extractor \
           	--single-end \
