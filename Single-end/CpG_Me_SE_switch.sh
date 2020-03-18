@@ -40,7 +40,7 @@ echo "Allocated memory:  ${MEM}"
 module load trim_galore/0.6.5
 PATH="$PATH:${mainPath}/programs/CpG_Me/Bismark-master/"
 module load bowtie2/2.3.4.1
-module load samtools/1.9
+module load samtools/1.10
 PATH="$PATH:${mainPath}/programs/CpG_Me/fastq_screen_v0.14.0/"
 export PYTHON_EGG_CACHE="${mainPath}/programs/CpG_Me"
 
