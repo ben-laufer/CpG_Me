@@ -4,10 +4,10 @@
 #SBATCH --workdir /share/lasallelab/genomes/
 #SBATCH --partition=production               
 #SBATCH --ntasks=12
-#SBATCH --mem-per-cpu=2000
+#SBATCH --mem=18000
 #SBATCH --output=rheMac10.out # File to which STDOUT will be written
 #SBATCH --error=rheMac10.err # File to which STDERR will be written
-#SBATCH --time=1-00:00:00
+#SBATCH --time=0-05:00:00
 
 export mainPath="/share/lasallelab"
 PATH="$PATH:${mainPath}/programs/CpG_Me/Bismark-master/"
@@ -23,9 +23,9 @@ gunzip GCF_003339765.1_Mmul_10_genomic.fna.gz
 
 mv GCF_003339765.1_Mmul_10_genomic.fna rheMac10.fa
 
-bowtie2-build --verbose rheMac10.fa rheMac10
-
-bismark_genome_preparation --bowtie2 --parallel 6 --verbose rheMac10/
+bowtie2-build --threads 12 --verbose rheMac10.fa rheMac10
 
 mkdir Bowtie2
 mv *.bt2 Bowtie2/
+
+bismark_genome_preparation --bowtie2 --parallel 6 --verbose .
