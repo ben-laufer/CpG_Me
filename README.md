@@ -279,9 +279,11 @@ Ewels P, Magnusson M, Lundin S, Käller M. MultiQC: summarize analysis results f
 
 ## Publications
 
-The following publications utilize **CpG_Me** and **DMRichR**:
+The following publications utilize **CpG_Me**:
 
-Wöste M, Leitão E, Laurentino S, Horsthemke B, Rahmann S, Schröder C. wg-blimp: an end-to-end analysis pipeline for whole genome bisulfite sequencing data. *bioRxiv* preprint. **doi**: [10.1101/859900](https://doi.org/10.1101/859900)
+Laufer BI, Hwang H, Jianu JM, Mordaunt CE, Korf IF, Hertz-Picciotto I, LaSalle JM. Low-Pass Whole Genome Bisulfite Sequencing of Neonatal Dried Blood Spots Identifies a Role for RUNX1 in Down Syndrome DNA Methylation Profiles. *bioRxiv* preprint. **doi**: [10.1101/2020.06.18.157693](https://doi.org/10.1101/2020.06.18.157693)
+
+Wöste M, Leitão E, Laurentino S, Horsthemke B, Rahmann S, Schröder C. wg-blimp: an end-to-end analysis pipeline for whole genome bisulfite sequencing data. *BMC Bioinformatics*, 2020. **doi**: [10.1186/s12859-020-3470-5](https://doi.org/10.1186/s12859-020-3470-5)
 
 Mordaunt CE, Jianu JM, Laufer BI, Zhu Y, Dunaway KW, Bakulski KM, Feinberg JI, Volk HE, Lyall K, Croen LA, Newschaffer CJ, Ozonoff S, Hertz-Picciotto I, Fallin DM, Schmidt RJ, LaSalle JM. Cord blood DNA methylome in newborns later diagnosed with autism spectrum disorder reflects early dysregulation of neurodevelopmental and X-linked genes. *bioRxiv* preprint. **doi**: [10.1101/850529](https://doi.org/10.1101/850529)
 
@@ -292,4 +294,4 @@ Vogel Ciernia A*, Laufer BI*, Hwang H, Dunaway KW, Mordaunt CE, Coulson RL, Yasu
 Laufer BI, Hwang H, Vogel Ciernia A, Mordaunt CE, LaSalle JM. Whole genome bisulfite sequencing of Down syndrome brain reveals regional DNA hypermethylation and novel disease insights. *Epigenetics*, 2019. **doi**: [10.1080/15592294.2019.1609867](https://doi.org/10.1080/15592294.2019.1609867)
 
 ## Acknowledgements
-The author would like to thank [Matt Settles](https://github.com/msettles) from the [UC Davis Bioinformatics Core](https://github.com/ucdavis-bioinformatics) for [examples of tidy code](https://github.com/ucdavis-bioinformatics-training/A-Primer-on-Using-the-Bioinformatics-Core-Administrated-Servers-and-Cluster-s-/tree/master/examples) and his suggestion of using a case statement to optimize the resource use of the different parts of this workflow on a high-performance computing cluster. I would also like to thank [Charles Mordaunt](https://github.com/cemordaunt) for contributing code that was developed into the insert size metrics call. Finally, I would like to thank [Ian Korf](https://github.com/KorfLab) for invaluable discussions related to the bioinformatic approaches utilized in this repository. 
+The development of this program was suppourted by a Canadian Institutes of Health Research (CIHR) postdoctoral fellowship [MFE-146824] and a [CIHR Banting postdoctoral fellowship](https://banting.fellowships-bourses.gc.ca/en/2018-2019-eng.html) [BPF-162684]. Contributions were made by [Hyeyeon Hwang](https://github.com/hyeyeon-hwang) and [Charles Mordaunt](https://github.com/cemordaunt). I would also like to thank [Matt Settles](https://github.com/msettles) and [Ian Korf](https://github.com/KorfLab) for invaluable discussions related to the bioinformatic approaches utilized in this repository. 
