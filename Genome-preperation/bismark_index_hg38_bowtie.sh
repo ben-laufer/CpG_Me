@@ -17,13 +17,10 @@ module load samtools/1.10
 mkdir ${mainPath}/genomes/hg38
 cd ${mainPath}/genomes/hg38
 
-rsync --copy-links --recursive --times --verbose rsync://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.39_GRCh38.p13/GCF_000001405.39_GRCh38.p13_genomic.fna.gz .
+rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/hg38/bigZips/latest/hg38.fa.gz .
+gunzip hg38.fa.gz
 
-gunzip GCF_000001405.39_GRCh38.p13_genomic.fna.gz
-
-mv GCF_000001405.39_GRCh38.p13_genomic.fna hg38.fa
-
-bowtie2-build --threads 12 hg38.fa hg38
+bowtie2-build --threads 12 --verbose hg38.fa hg38
 
 mkdir Bowtie2
 mv *.bt2 Bowtie2/

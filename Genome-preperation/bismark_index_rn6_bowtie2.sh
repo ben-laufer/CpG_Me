@@ -17,13 +17,10 @@ module load samtools/1.10
 mkdir ${mainPath}/genomes/rn6
 cd ${mainPath}/genomes/rn6
 
-rsync --copy-links --recursive --times --verbose rsync://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/895/GCF_000001895.5_Rnor_6.0/GCF_000001895.5_Rnor_6.0_genomic.fna.gz .
+rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/rn6/bigZips/rn6.fa.gz .
+gunzip rn6.fa.gz
 
-gunzip GCF_000001895.5_Rnor_6.0_genomic.fna.gz
-
-mv GCF_000001895.5_Rnor_6.0_genomic.fna.gz rn6.fa
-
-bowtie2-build --threads 12 rn6.fa rn6
+bowtie2-build --threads 12 --verbose rn6.fa rn6
 
 mkdir Bowtie2
 mv *.bt2 Bowtie2/

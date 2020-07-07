@@ -17,13 +17,10 @@ module load samtools/1.10
 mkdir ${mainPath}/genomes/mm10
 cd ${mainPath}/genomes/mm10
 
-rsync --copy-links --recursive --times --verbose rsync://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/635/GCF_000001635.26_GRCm38.p6/GCF_000001635.26_GRCm38.p6_genomic.fna.gz .
+rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/mm10/bigZips/mm10.fa.gz .
+gunzip mm10.fa.gz
 
-gunzip GCF_000001635.26_GRCm38.p6_genomic.fna.gz
-
-mv GCF_000001635.26_GRCm38.p6_genomic.fna mm10.fa
-
-bowtie2-build --threads 12 mm10.fa mm10
+bowtie2-build --threads 12 --verbose mm10.fa mm10
 
 mkdir Bowtie2
 mv *.bt2 Bowtie2/

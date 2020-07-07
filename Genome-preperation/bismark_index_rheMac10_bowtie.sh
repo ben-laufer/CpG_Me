@@ -17,11 +17,8 @@ module load samtools/1.10
 mkdir ${mainPath}/genomes/rheMac10
 cd ${mainPath}/genomes/rheMac10
 
-rsync --copy-links --recursive --times --verbose rsync://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/339/765/GCF_003339765.1_Mmul_10/GCF_003339765.1_Mmul_10_genomic.fna.gz .
-
-gunzip GCF_003339765.1_Mmul_10_genomic.fna.gz
-
-mv GCF_003339765.1_Mmul_10_genomic.fna rheMac10.fa
+rsync -avzP rsync://hgdownload.soe.ucsc.edu/goldenPath/rheMac10/bigZips/rheMac10.fa.gz .
+gunzip rheMac10.fa.gz
 
 bowtie2-build --threads 12 --verbose rheMac10.fa rheMac10
 
