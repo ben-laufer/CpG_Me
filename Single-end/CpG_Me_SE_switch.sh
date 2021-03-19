@@ -37,12 +37,12 @@ echo "Allocated memory:  ${MEM}"
 # Load Modules #
 ################
 
-module load trim_galore/0.6.6
 PATH="$PATH:${mainPath}/programs/CpG_Me/Bismark-master/"
-module load bowtie2/2.3.4.1
-module load samtools/1.10
+module load bowtie2/2.4.2
+module load samtools/1.11
 PATH="$PATH:${mainPath}/programs/CpG_Me/fastq_screen_v0.14.0/"
 export PYTHON_EGG_CACHE="${mainPath}/programs/CpG_Me"
+module load trim_galore/0.6.6
 source activate cutadapt-2.10
 
 ######################
