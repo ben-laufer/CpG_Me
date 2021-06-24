@@ -1,7 +1,8 @@
 # CpG_Me
+[![DOI](https://zenodo.org/badge/149648065.svg)](https://zenodo.org/badge/latestdoi/149648065)
 #### A whole genome bisulfite sequencing (WGBS) alignment pipeline for the analysis of DNA methylation
 
-CpG_Me is an optimized and comprehensive WGBS alignment pipeline for a SLURM job scheduler on a high-performance computing cluster. CpG_Me takes you from raw fastq files to CpG methylation count matrices (Bismark cytosine reports), where it preprocesses data to remove biases and provides ample QC/QA. Scripts are available for both paired end (PE) and single end (SE) sequencing approaches. The extracted CpG methylation count matrices can be then be used for the identification of differentially methylated regions (DMRs) through the accompanying [DMRichR](https://github.com/ben-laufer/DMRichR) workflow.
+CpG_Me is an optimized and comprehensive WGBS alignment pipeline for a SLURM job scheduler on a high-performance computing cluster. CpG_Me takes you from raw fastq files to CpG methylation count matrices (Bismark cytosine reports), where it processes data to remove biases and provides ample QC/QA. Scripts are available for both paired end (PE) and single end (SE) sequencing approaches. The extracted CpG methylation count matrices can be then be used for the identification of differentially methylated regions (DMRs) through the accompanying [DMRichR](https://github.com/ben-laufer/DMRichR) workflow.
 
 ### Table of Contents
 
@@ -280,6 +281,8 @@ Ewels P, Magnusson M, Lundin S, Käller M. MultiQC: summarize analysis results f
 ## Publications
 
 The following publications utilize **CpG_Me**:
+
+Laufer BI*, Neier KE*, Valenzuela AE, Yasui DH, Lein PJ, LaSalle JM. Genome-Wide DNA Methylation Profiles of Neurodevelopmental Disorder Genes in Mouse Placenta and Fetal Brain Following Prenatal Exposure to Polychlorinated Biphenyls. *bioRxiv* preprint, 2021. **doi**: [10.1101/2021.05.27.446011](https://doi.org/10.1101/2021.05.27.446011) 
 
 Laufer BI*, Gomez JA*, Jianu JM, LaSalle, JM.  Stable DNMT3L Overexpression in SH-SY5Y Neurons Recreates a Facet of the Genome-Wide Down Syndrome DNA Methylation Signature. *Epigenetics & Chromatin*, 2021. **doi**:[10.1186/s13072-021-00387-7](https://doi.org/10.1186/s13072-021-00387-7)
 
